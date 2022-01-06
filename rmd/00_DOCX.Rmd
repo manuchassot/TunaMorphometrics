@@ -1,0 +1,55 @@
+---
+title: "Morphometrics and allometry in tuna from the tropical Atlantic and Indian Oceans"
+date: "`r format(Sys.time(), '%d %B %Y')`"
+author: Chassot Emmanuel^1,2^, Nathalie Bodin^1,2,4^, Constance Diaha^3^, Cindy Assan^4^, Aurélie Guillou^1^, Julien Lebranchu^1,\(^\dagger\)^
+output:
+  word_document2:
+    reference_docx: "../templates/doc_template.docx"
+    number_sections: FALSE
+csl: cjfas.csl
+bibliography: TunaMorpho.bib
+link-citations: yes
+---
+  
+```{r general_options, echo=FALSE}
+knitr::opts_chunk$set(
+  echo = FALSE,
+  tidy = TRUE,
+  tidy.opts = list(width.cutoff = 60),
+  size = 'small',
+  
+  tab.cap.pre = "Table ",
+  tab.cap.sep = ". ",
+  tab.cap.style ='Table Caption',
+  
+  fig.cap.style = "Caption label",
+  fig.cap.pre = "Fig. ", 
+  fig.cap.sep = ". ",
+  
+  fig.width   = 8,
+  fig.height  = 4.5
+)
+
+knit_hooks$set(
+  inline = function(x) {
+    #prettyNum(x, big.mark = ",")
+    prettyNum(x, big.mark = "")
+  }
+)
+```
+
+```{r child = "00_FRONT.Rmd"}
+```
+
+```{r child = "01_INTRODUCTION.Rmd"}
+```
+
+\pagebreak
+
+```{r child = "APPENDIX1.Rmd", eval = FALSE}
+```
+
+\pagebreak
+
+```{r child = '90_REFERENCES.Rmd', eval = FALSE}
+```
