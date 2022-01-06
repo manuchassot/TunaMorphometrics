@@ -10,4 +10,9 @@ Morphometric data are widely used to derive conversion factors and relationships
 
 Purse seine fishing has represented about 70% of the global tropical tuna catch over the last decade, with an estimate of more than 3.6 million metric tons in 2019. In the Indian and Atlantic Oceans, the purse seine catch of the principal market tunas, yellowfin tuna (_Thunnus albacares_), skipjack tuna (_Katsuwonus pelamis_) and bigeye tuna (_Thunnus obesus_), was close to 800,000 metric tons in recent years. Purse seiners also catch albacore tuna (_Thunnus alalunga_) to a lesser extent when they occur in mixed schools with tropical tunas. The species composition of most purse seine catch of the Indian and Atlantic is estimated from size samples of the catch performed during unloading operations that mainly take place in the ports of Abidjan (Côte d'Ivoire), Dakar (Senegal), and Victoria (Seychelles) [@Pianet2000]. The collection of morphometric data on tuna has been implemented as early as the 1970s to derive the morphometric relationships required for the monitoring of purse seine fisheries occurring in the Atlantic and Indian Oceans (Guillou et al. _submitted_).
 
-The present study aims to derive length-length and length-weight relationships for the principal market tropical tunas and albacore tuna caught with purse seine in the Atlantic and Indian oceans based on the morphometric data sets collected in the principal fishing ports where tuna is landed. 
+The overarching objective of the present study is to derive length-length and length-weight relationships for the principal market tropical tunas and albacore tuna caught with purse seine in the Atlantic and Indian oceans based on large morphometric data sets collected through different monitoring programs since the mid-1970s.   
+
+
+
+
+

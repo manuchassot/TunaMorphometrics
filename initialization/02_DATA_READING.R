@@ -9,9 +9,7 @@ AO_RAW_SAMPLES_WITH_ENVIRONMENT[indic_semi_colon, geometry := gsub(";", " ", geo
 
 indic_comma = grep(",", AO_RAW_SAMPLES_WITH_ENVIRONMENT$geometry)
 
-AO_RAW_SAMPLES_WITH_ENVIRONMENT[indic_comma][][, geometry := gsub(";", " ", geometry)]
-
-
+AO_RAW_SAMPLES_WITH_ENVIRONMENT[indic_comma & !(grep("MULTIPOINT", geometry)), geometry := gsub(",", ".", geometry)]
 
 # Convert to simple feature
 AO_RAW_SAMPLES_WITH_ENVIRONMENT_SF = st_as_sf(AO_RAW_SAMPLES_WITH_ENVIRONMENT, wkt = "geometry", crs = 4326)
