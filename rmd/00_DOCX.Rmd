@@ -1,7 +1,7 @@
 ---
-title: "Morphometrics and allometry in tuna from the tropical Atlantic and Indian Oceans"
+title: "Morphometrics and allometry in tropical tuna from the tropical Atlantic and Indian Oceans"
 date: "`r format(Sys.time(), '%d %B %Y')`"
-author: Chassot Emmanuel^1,2^, Nathalie Bodin^1,2,4^, Constance Diaha^3^, Cindy Assan^4^, Aurélie Guillou^1^, Julien Lebranchu^1,\(^\dagger\)^
+author: Chassot Emmanuel^1,2^, Nathalie Bodin^1,2,4^, Constance Diaha^3^, Cindy Assan^4^, Aurélie Guillou^1^, Julien Lebranchu^1^, Francis Marsac^1,\(^\dagger\)^
 output:
   word_document2:
     reference_docx: "../templates/doc_template.docx"
