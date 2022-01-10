@@ -20,6 +20,7 @@ p_load(
   "ggsci",
   "RPostgreSQL",
   "data.table",
-  "sf"
+  "sf",
+  "colorspace"
   )
 

@@ -1,4 +1,14 @@
 
 # Methods
 
-<!-- The parameters a and b can either be estimated by linear regression on the log-transformed variables (Ricker, 1975) or by non-linear regression of non-transformed variables (Hayes et al., 1995). The two methods differ in their assumptions on the error structure. Linear regression on the log-transformed variables assumes that the errors in the observed weights are log-normally distributed and multiplicative, while non-linear regression assumes a normally distributed, additive error structure (Hayes et al., 1995). Linear regression results in a bias due to the logarithmic transformation: the model passes through the geometric mean, rather than the arithmetic mean, but this can be adjusted using a simple correction factor (Sprugel, 1983). -->
+## Statistical models
+
+- Mean linear regression models fitted to the log-transformed variables: observed weights are log-normally distributed and multiplicative. Lognormal error to justify. 
+
+- Linear regression results in a bias due to the logarithmic transformation: the model passes through the geometric mean, rather than the arithmetic mean, but this can be adjusted using a simple correction factor (Sprugel, 1983)
+
+- Use of prior distributions borrowed from other time periods and areas
+
+## Prior elicitation
+
+## Bayesian inference

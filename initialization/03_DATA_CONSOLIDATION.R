@@ -75,17 +75,13 @@ SAMPLES_VARIABLES = RAW_SAMPLES_WITH_ENVIRONMENT[!fish_identifier %in% ID_REPLIC
 # FISGING_DATE_MAX
 
 # Convert to simple feature
-RAW_SAMPLES_WITH_ENVIRONMENT_SF = st_as_sf(RAW_SAMPLES_WITH_ENVIRONMENT[1:1000], wkt = "geometry", crs = 4326)
+#RAW_SAMPLES_WITH_ENVIRONMENT_SF = st_as_sf(RAW_SAMPLES_WITH_ENVIRONMENT[1:1000], wkt = "geometry", crs = 4326)
 
-RAW_SAMPLES_WITH_ENVIRONMENT_SF %>% group_by(FISH_ID)
+#RAW_SAMPLES_WITH_ENVIRONMENT_SF %>% group_by(FISH_ID)
 
-toto1_SF = st_as_sf(toto1, wkt = "GEOM", crs = 4326)
+#toto1_SF = st_as_sf(toto1, wkt = "GEOM", crs = 4326)
 
-TOTO = 
-  toto1_SF[1:10000, ] %>% group_by(FISH_ID) %>% summarise()
-
-
-
+#TOTO = toto1_SF[1:10000, ] %>% group_by(FISH_ID) %>% summarise()
 
 #toto1[, SF := st_union(rgeos::readWKT(GEOM)), keyby = .(FISH_ID)]
 
