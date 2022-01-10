@@ -1,4 +1,6 @@
 
+# CONSOLIDATE DCF/EUMAP DATA SETS ####
+
 # Combine both data sets
 RAW_SAMPLES_WITH_ENVIRONMENT = rbindlist(list(AO_RAW_SAMPLES_WITH_ENVIRONMENT1, IO_RAW_SAMPLES_WITH_ENVIRONMENT3))
 
@@ -23,7 +25,7 @@ RAW_SAMPLES_WITH_ENVIRONMENT[, fishing_date_max := as.POSIXct(fishing_date_max)]
 RAW_SAMPLES_WITH_ENVIRONMENT[, fishing_date := as.POSIXct(fishing_date)]
 
 # Update fishing date with average fishing date when missing
-RAW_SAMPLES_WITH_ENVIRONMENT[is.na(fishing_date) & !is.na(fishing_date_min)] 
+#RAW_SAMPLES_WITH_ENVIRONMENT[is.na(fishing_date) & !is.na(fishing_date_min)] 
 
 RAW_SAMPLES_WITH_ENVIRONMENT[!is.na(fishing_date), `:=` (fishing_date_min = NA, fishing_date_max = NA)]
 
@@ -46,6 +48,17 @@ RAW_SAMPLES_WITH_ENVIRONMENT[is.na(vessel_storage_mode), vessel_storage_mode := 
 # Update devices
 RAW_SAMPLES_WITH_ENVIRONMENT[measuring_device_1 == "Calliper", measuring_device_1 := "calliper"]
 RAW_SAMPLES_WITH_ENVIRONMENT[measuring_device_2 == "Calliper", measuring_device_2 := "calliper"]
+
+
+# DEFINE DATA SETS ####
+AO_EU_DATASET = unique(RAW_SAMPLES_WITH_ENVIRONMENT[ocean_code == "AO", .(ocean_code, project, sampling_year, species_code_fao, sex, fork_length, whole_fish_weight)])
+
+IO_EU_DATASET = unique(RAW_SAMPLES_WITH_ENVIRONMENT[ocean_code == "IO", .(ocean_code, project, sampling_year, species_code_fao, sex, fork_length, whole_fish_weight)])
+
+FULL_DATASET = rbindlist(list(AO_EU_DATASET, IO_EU_DATASET, IO_EMOTION, IO_FONTENEAU, IO_OTHERS, IO_IOTTP), use.names = TRUE, fill = TRUE)
+
+FULL_DATASET[, STOCK := paste(ocean_code, species_code_fao, sep = " | ")]
+FULL_DATASET[, species_code_fao := as.factor(species_code_fao)]
 
 # Rename headers
 #SAMPLES = unique(RAW_SAMPLES_WITH_ENVIRONMENT[, .(FISH_ID = fish_identifier, SAMPLING_DATE = fish_sampling_date, PROJECT = project, SPECIES_CODE = species_code_fao, FL = fork_length, FL_DEVICE = measuring_device_1, SF = first_dorsal_length, SF_DEVICE = measuring_device_2,  RD = whole_fish_weight, RD_device = measuring_device_4, SEX = sex, GEAR_CODE = gear_code, sCHOOL_TYPE = fifelse(length(unique(fishing_mode)) >1, "MIX", unique(fishing_mode)), FISHING_DATE_AVG = fishing_date_avg)])

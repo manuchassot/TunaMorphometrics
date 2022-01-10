@@ -43,18 +43,18 @@ AO_RAW_SAMPLES_WITH_ENVIRONMENT1 = AO_RAW_SAMPLES_WITH_ENVIRONMENT[!AO_INDIC_NO_
 # Other data sets ####
 
 IO_EMOTION   = fread("../inputs/data/data_emotion_fl_wt_2009_2014.csv")[c_sp_fao %in% c("BET", "SKJ", "YFT")]
-names(IO_EMOTION) = c("project", "sampling_year", "species_code_fao", "sex", "fork_length", "whole_fish_weight")
+IO_EMOTION[, ocean_code := "IO"]
+names(IO_EMOTION) = c("project", "sampling_year", "species_code_fao", "sex", "fork_length", "whole_fish_weight", "ocean_code")
 
 IO_FONTENEAU = fread("../inputs/data/data_fonteneau_fl_wt_2003.csv")
-names(IO_FONTENEAU) = c("project", "sampling_year", "species_code_fao", "sex", "fork_length", "whole_fish_weight")
+IO_FONTENEAU[, ocean_code := "IO"]
+names(IO_FONTENEAU) = c("project", "sampling_year", "species_code_fao", "sex", "fork_length", "whole_fish_weight", "ocean_code")
 
 IO_OTHERS    = fread("../inputs/data/data_iotmdm_fl_wt_1986_2015.csv")[project != "DCF"]
-names(IO_OTHERS) = c("project", "sampling_year", "species_code_fao", "sex", "fork_length", "whole_fish_weight")
+IO_OTHERS[, ocean_code := "IO"]
+names(IO_OTHERS) = c("project", "sampling_year", "species_code_fao", "sex", "fork_length", "whole_fish_weight", "ocean_code")
 
 IO_IOTTP     = fread("../inputs/data/data_iottp_fl_wt_2009_2015.csv")
-names(IO_IOTTP) = c("project", "sampling_year", "species_code_fao", "sex", "fork_length", "whole_fish_weight")
-
-IO_PROJECTS = rbindlist(list(IO_EMOTION, IO_FONTENEAU, IO_OTHERS, IO_IOTTP), fill = T)
-
-
+IO_IOTTP[, ocean_code := "IO"]
+names(IO_IOTTP) = c("project", "sampling_year", "species_code_fao", "sex", "fork_length", "whole_fish_weight", "ocean_code")
 
