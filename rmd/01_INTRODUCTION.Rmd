@@ -11,7 +11,9 @@ The overarching objective of the present study is to derive robust relationships
 <!-- in order to propagate it to the estimates of catch  -->
 <!-- habitat represented by biogeographical provinces (Longhurst 1998) and quarters (Dueri et al.) -->
 
+<!-- Effects of area and time (Chatwin1959; Hennemuth 1959) -->
 
+<!-- Estimates of the condition factor and allometry coefficient can be related to ecological processes and life history. High values of the allometry coefficient imply that the species gains weight fast growing in length. The value of the coefficient estimated for a species can vary between stocks and even between areas Andrade & Campos 2002 -->
 
 
 

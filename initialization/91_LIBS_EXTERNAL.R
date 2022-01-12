@@ -21,6 +21,7 @@ p_load(
   "RPostgreSQL",
   "data.table",
   "sf",
-  "colorspace"
+  "colorspace",
+  "rfishbase"
   )
 
