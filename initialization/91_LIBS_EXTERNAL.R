@@ -22,6 +22,7 @@ p_load(
   "data.table",
   "sf",
   "colorspace",
-  "rfishbase"
+  "rfishbase",
+  "patchwork"
   )
 

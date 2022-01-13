@@ -57,8 +57,13 @@ IO_EU_DATASET = unique(RAW_SAMPLES_WITH_ENVIRONMENT[ocean_code == "IO", .(ocean_
 
 FULL_DATASET = rbindlist(list(AO_EU_DATASET, IO_EU_DATASET, IO_EMOTION, IO_FONTENEAU, IO_OTHERS, IO_IOTTP), use.names = TRUE, fill = TRUE)
 
-FULL_DATASET[, STOCK := paste(ocean_code, species_code_fao, sep = " | ")]
+FULL_DATASET[, stock := paste(ocean_code, species_code_fao, sep = " | ")]
 FULL_DATASET[, species_code_fao := as.factor(species_code_fao)]
+FULL_DATASET[species_code_fao == "BET", `:=` (species_english_name = "Bigeye tuna", species_scientific_name = "Thunnus obesus")]
+FULL_DATASET[species_code_fao == "SKJ", `:=` (species_english_name = "Skipjack tuna", species_scientific_name = "Katsuwonus pelamis")]
+FULL_DATASET[species_code_fao == "YFT", `:=` (species_english_name = "Yellowfin tuna", species_scientific_name = "Thunnus albacares")]
+FULL_DATASET[ocean_code == "AO", ocean := "Atlantic Ocean"]
+FULL_DATASET[ocean_code == "IO", ocean := "Indian Ocean"]
 
 # Rename headers
 #SAMPLES = unique(RAW_SAMPLES_WITH_ENVIRONMENT[, .(FISH_ID = fish_identifier, SAMPLING_DATE = fish_sampling_date, PROJECT = project, SPECIES_CODE = species_code_fao, FL = fork_length, FL_DEVICE = measuring_device_1, SF = first_dorsal_length, SF_DEVICE = measuring_device_2,  RD = whole_fish_weight, RD_device = measuring_device_4, SEX = sex, GEAR_CODE = gear_code, sCHOOL_TYPE = fifelse(length(unique(fishing_mode)) >1, "MIX", unique(fishing_mode)), FISHING_DATE_AVG = fishing_date_avg)])

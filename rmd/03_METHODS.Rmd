@@ -11,4 +11,6 @@
 
 ## Prior elicitation
 
+We conducted a literature review of relationships between predorsal length and fork length and fork length and round weight for the three tropical tunas.
+
 ## Bayesian inference

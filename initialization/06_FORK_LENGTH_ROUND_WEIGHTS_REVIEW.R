@@ -72,14 +72,42 @@ OTHER_PARAMS = data.table(read.xlsx("../inputs/data/TRFMO_PARAMETERS.xlsx", shee
 
 FL_RW_PARAMS = rbindlist(list(FISHBASE_PARAMS, TRFMO_PARAMS, OTHER_PARAMS), use.names = TRUE)
 
+# Statistics
+FL_RW_PARAMS[, as.list(summary(a*1e5)), keyby = .(Species, SpeciesCode)]
 
-
+FL_RW_PARAMS_ab_BIPLOT =
 ggplot(FL_RW_PARAMS, aes(x = a*1e5, y = b, color = Species, shape = Species)) +
-  geom_point(size = 3) +
+  geom_point(size = 2.5) +
   theme_bw() +
-  labs(x = "a x 1e-5", y = "b") +
+  labs(x = expression(paste("a x 1", e^{-5})), y = "b") +
   theme(legend.position = "bottom") +
-  theme(legend.title = element_blank())
+  theme(legend.title = element_blank(), legend.text = element_text(face = "italic"))
 
+ggsave(filename = "../outputs/charts/PRIORS/FL_RW_PARAMS_ab_BIPLOT.png", plot = FL_RW_PARAMS_ab_BIPLOT, width = 8, height = 6)
 
+# Marginal distributions
+
+FL_RW_PARAMS_a_PLOT =
+ggplot(FL_RW_PARAMS, aes(x = a*1e5, y = Species, fill = Species)) +
+  geom_boxplot() +
+  theme_bw() +
+  labs(x = expression(paste("a x 1", e^{-5})), y = "") +
+  theme(legend.position = "none") +
+  theme(axis.text.y = element_text(face = "italic"))
+  
+FL_RW_PARAMS_b_PLOT =
+ggplot(FL_RW_PARAMS, aes(x = b, y = Species, fill = Species)) +
+  geom_boxplot() +
+  theme_bw() +
+  labs(x = "b", y = "") +
+  theme(legend.position = "none") +
+  theme(axis.text.y = element_text(face = "italic"))
+
+FL_RW_PARAMS_ab_PLOT  = FL_RW_PARAMS_a_PLOT + FL_RW_PARAMS_b_PLOT
+
+FL_RW_PARAMS_ab_PLOT[[2]] = FL_RW_PARAMS_ab_PLOT[[2]] + theme(axis.text.y = element_blank(),
+                                        axis.ticks.y = element_blank(),
+                                        axis.title.y = element_blank() )
+
+ggsave(filename = "../outputs/charts/PRIORS/FL_RW_PARAMS_ab_MARGINAL_PLOTS.png", plot = FL_RW_PARAMS_ab_PLOT, width = 8, height = 4.5)
 
