@@ -48,7 +48,7 @@ knit_hooks$set(
 ```{r child = "02_MATERIALS.Rmd"}
 ```
 
-```{r child = "02_METHODS.Rmd"}
+```{r child = "03_METHODS.Rmd"}
 ```
 
 \pagebreak
