@@ -48,6 +48,9 @@ knit_hooks$set(
 ```{r child = "02_MATERIALS.Rmd"}
 ```
 
+```{r child = "02_METHODS.Rmd"}
+```
+
 \pagebreak
 
 ```{r child = "APPENDIX1.Rmd", eval = FALSE}

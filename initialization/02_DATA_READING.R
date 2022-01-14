@@ -45,6 +45,7 @@ AO_RAW_SAMPLES_WITH_ENVIRONMENT1 = AO_RAW_SAMPLES_WITH_ENVIRONMENT[!AO_INDIC_NO_
 IO_EMOTION   = fread("../inputs/data/data_emotion_fl_wt_2009_2014.csv")[c_sp_fao %in% c("BET", "SKJ", "YFT")]
 IO_EMOTION[, ocean_code := "IO"]
 names(IO_EMOTION) = c("project", "sampling_year", "species_code_fao", "sex", "fork_length", "whole_fish_weight", "ocean_code")
+IO_EMOTION[sex == "", sex := NA]
 
 IO_FONTENEAU = fread("../inputs/data/data_fonteneau_fl_wt_2003.csv")
 IO_FONTENEAU[, ocean_code := "IO"]
@@ -57,4 +58,4 @@ names(IO_OTHERS) = c("project", "sampling_year", "species_code_fao", "sex", "for
 IO_IOTTP     = fread("../inputs/data/data_iottp_fl_wt_2009_2015.csv")
 IO_IOTTP[, ocean_code := "IO"]
 names(IO_IOTTP) = c("project", "sampling_year", "species_code_fao", "sex", "fork_length", "whole_fish_weight", "ocean_code")
-
+IO_IOTTP[sex == "", sex := NA]

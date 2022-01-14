@@ -23,6 +23,11 @@ p_load(
   "sf",
   "colorspace",
   "rfishbase",
-  "patchwork"
+  "patchwork",
+  "rjags",
+  "R2jags",
+  "mcmcplots",
+  "coda",
+  "boa"
   )
 

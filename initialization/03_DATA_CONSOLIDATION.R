@@ -19,6 +19,11 @@ RAW_SAMPLES_WITH_ENVIRONMENT[, landing_year := year(landing_date)]
 # Update fishing mode
 RAW_SAMPLES_WITH_ENVIRONMENT[fishing_mode == "NA", fishing_mode := NA]
 
+# Update sex
+RAW_SAMPLES_WITH_ENVIRONMENT[sex == "H", sex := "M"] # assumption that H is MALE
+RAW_SAMPLES_WITH_ENVIRONMENT[sex == "NA", sex := NA]
+RAW_SAMPLES_WITH_ENVIRONMENT[sex == "", sex := NA]
+
 # Format fishing dates
 RAW_SAMPLES_WITH_ENVIRONMENT[, fishing_date_min := as.POSIXct(fishing_date_min)]
 RAW_SAMPLES_WITH_ENVIRONMENT[, fishing_date_max := as.POSIXct(fishing_date_max)]
@@ -49,7 +54,6 @@ RAW_SAMPLES_WITH_ENVIRONMENT[is.na(vessel_storage_mode), vessel_storage_mode := 
 RAW_SAMPLES_WITH_ENVIRONMENT[measuring_device_1 == "Calliper", measuring_device_1 := "calliper"]
 RAW_SAMPLES_WITH_ENVIRONMENT[measuring_device_2 == "Calliper", measuring_device_2 := "calliper"]
 
-
 # DEFINE DATA SETS ####
 AO_EU_DATASET = unique(RAW_SAMPLES_WITH_ENVIRONMENT[ocean_code == "AO", .(ocean_code, project, sampling_year, species_code_fao, sex, fork_length, whole_fish_weight)])
 
@@ -57,8 +61,11 @@ IO_EU_DATASET = unique(RAW_SAMPLES_WITH_ENVIRONMENT[ocean_code == "IO", .(ocean_
 
 FULL_DATASET = rbindlist(list(AO_EU_DATASET, IO_EU_DATASET, IO_EMOTION, IO_FONTENEAU, IO_OTHERS, IO_IOTTP), use.names = TRUE, fill = TRUE)
 
+# Consolidate FULL LENGTH_WEIGHT DATA SET 
 FULL_DATASET[, stock := paste(ocean_code, species_code_fao, sep = " | ")]
 FULL_DATASET[, species_code_fao := as.factor(species_code_fao)]
+FULL_DATASET[, sex := as.factor(sex)]
+#FULL_DATASET[sex %in% c("", "NA"), sex := NA]
 FULL_DATASET[species_code_fao == "BET", `:=` (species_english_name = "Bigeye tuna", species_scientific_name = "Thunnus obesus")]
 FULL_DATASET[species_code_fao == "SKJ", `:=` (species_english_name = "Skipjack tuna", species_scientific_name = "Katsuwonus pelamis")]
 FULL_DATASET[species_code_fao == "YFT", `:=` (species_english_name = "Yellowfin tuna", species_scientific_name = "Thunnus albacares")]
