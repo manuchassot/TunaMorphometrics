@@ -17,7 +17,7 @@ nls2_jags <- function(){
   }
   
   # Derived quantities
-  tau     = pow(sigma, -2)                  # tau is precision (1 / variance)
+  tau     = 1 / (sigma * sigma)                  # tau is precision (1 / variance)
   a       = 10^(log10a)
   a_prior = 10^(log10a_prior)
   a1e5_prior = 10^(log10a_prior) * 1e5
@@ -64,7 +64,6 @@ ni = 12000
 nb = 2000
 nt = 10
 
-
 FL_RW_MODEL = jags(data = JAGS_DATA, inits = init_values, parameters.to.save = params, model.file = nls2_jags, n.chains = nc, n.iter = ni, n.burnin = nb, n.thin = nt, DIC = T)
 
 # OUTPUTS ####
@@ -88,7 +87,6 @@ ggplot(MODEL_SUMMARY[rn %in% c("a1e5"), .(rn, Rhat)], aes(x = 1:ITERATIONS, y = 
   facet_wrap(~rn)
 
 ## MODEL FIT ####
-
 
 
 ## PRIOR & POSTERIOR PARAMETERS ####
@@ -116,6 +114,31 @@ ggplot(data = PARAMETERS_POSTERIORS, aes(x = VALUE)) +
   theme(strip.background = element_rect(fill = "white"))
 
 ggsave("../outputs/charts/BAYESIAN/PRIORS_POSTERIORS_CHART.png", PRIORS_POSTERIORS_CHART, width = 8, height = 4.5)
+
+a_PRIOR = data.table(a = 10^(rnorm(1000, mean = -4.589, sd = sqrt(1/21))) * 1e5)
+a_PRIOR[, REL := a/sum(a)]
+
+ggplot(PARAMETERS_POSTERIORS[PARAM == "a1e5"], aes(x = VALUE)) +
+  geom_density() +
+  geom_density(data = a_PRIOR, aes(x = a), size = 1.2, color = "red") +
+  theme_bw() +
+  labs(x = "value", y = "Density")
+
+b_PRIOR = data.table(b = rnorm(1000, mean = 2.955, sd = sqrt(1/91)))
+b_PRIOR[, REL := b/sum(b)]
+
+ggplot(PARAMETERS_POSTERIORS[PARAM == "b"], aes(x = VALUE)) +
+  geom_density() +
+  geom_density(data = b_PRIOR, aes(x = b), size = 1.2, color = "red") +
+  theme_bw() +
+  labs(x = "value", y = "Density")
+
+
+
+
+
+
+
 
 ## PREDICTIONS ####
 
