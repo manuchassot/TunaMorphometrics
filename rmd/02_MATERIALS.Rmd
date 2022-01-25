@@ -3,24 +3,32 @@
 
 ## Sampling operations
 
-Most sampling operations were conducted at tuna processing factories located in Abidjan (Côte d'Ivoire) and Victoria (Seychelles) through agreements to comply with health and quality manufacturer practices and not delay processing operations [@Marsac2006; @Chassot2014]. Access to the canneries and processing lines varied over time according to management policy and staff availability, which resulted in unbalanced sampling design (**Table 1**). In complement, some tunas were sampled during tagging and recovery operations conducted as per the Indian Ocean Regional Tuna Tagging Programme [IO-RTTP; @Murua2015] and some research projects conducted on the ecology of tropical tuna in the region [@Bodin2018].
+Most sampling operations were conducted at tuna processing factories located in Abidjan (Côte d'Ivoire) and Victoria (Seychelles) through agreements with the companies to comply with health and quality manufacturer practices and not delay processing operations [@Marsac2006; @Chassot2014]. Access to the canneries and processing lines varied over time according to management policy and staff availability, which resulted in unbalanced sampling design (**Table 1**). In complement, some tunas were sampled during tagging and recovery operations conducted as per the Indian Ocean Regional Tuna Tagging Programme [IO-RTTP; @Murua2015] and throughout some research projects conducted on the ecology of tropical tuna in the region [@Bodin2018].
 
-## Biological measurements
+## Sampling protocol
 
-The sampling protocol  
+For each fish, the species was identified based on meristic and morphometric traits and the sex determined from visual examination of the gonads [@Collette1983]. All fish from processing factories were defrosted prior to sampling for length and weight (**Table X**). Length measurements were taken with a calliper in most cases and recorded to the nearest 0.1 cm while total weights were measured with a 150 kg scale. Tuna collected during the IO-RTTP were sampled fresh at sea and measured with a measuring board while total weights were measured with spring scales.
 
-Different morphometric measurements were recorded for each fish: fork length (L_F: projected straight distance measured to the nearest 0.1 cm from the tip of the upper jaw to the shortest caudal ray), total fish weight (to the nearest 0.1 kg), gonad, liver, and full stomach weights (to the nearest 0.1 g). Sex (M: Male; F: Female; Ind: Indeterminate) was based on macroscopic examination of the gonads.
+## Fish traceability
 
-Information on the measurement device (calliper, tape measure, or fish ruler) was also recorded when possible. In addition to the morphometric measurements, 
+Traceability corresponds to the ability of accurately and precisely determining the origin of the fish sampled, i.e., the geographic location and date when the fish was caught at sea. Hence, traceability depends on the information recorded and available throughout the production process, from fishing to processing.
 
-the weight of the fish (whole fish weight - WFW, and gutted fish weight - GFW), and the weight of reproductive and digestive organs (gonads weight - GTW, liver weight - LW, full and empty stomach weight - FSW and ESW) were recorded  
+The origin of each fish sampled was derived from the information recorded and available at each stage of the production process, i.e., first from the processing factory and second, from the fishing industry.
 
-<!-- The sampling protocol for length-weight data consisted in identifying the tuna species, which can be an issue for juveniles of yellowfin and bigeye <40 cm (Itano, 2004), measuring fish length (cm) with a caliper to the nearest 0.1 cm and mass (kg) to the nearest 0.1 g with a scale. Sex and sexual maturity stage were determined from visual examination of the gonads according to standard classification (Schaefer and Orange, 1956).  -->
+The fishing vessel and date of unloading were systematically recorded by the processing factories, making it possible to identify the fishing trip of origin of the fish sampled. In Abidjan, the wells of 
 
-## Traceability
+Information on fishing operations was made available from fisher logbooks and well plans which record the origin of the catch stored in the freezing wells of the purse seiners.
 
-The traceability corresponds to the ability to accurately and precisely determine the origin of a fish sampled, i.e., the geographic location and date when the fish was caught at sea. This also includes the vessel and trip identifiers. Traceability is dependent on the vessel configuration and sampling constraints (e.g., access to the vessel, configuration of the wells, sorting occurring at unloading). At sea, the catch from a fishing set can be stored in different wells on board, and several fishing sets can be stored in the same well. The identifier of the well containing the sampled fish was also registered when available. Information on fishing operations are collected from the logbook and well plan of the trip associated.
+depends on the stage of collection of the fish for sampling as well as . Onboard the fishing vessels, the accuracy of traceability is dependent on the vessel's configuration and fish handling and storing procedures (e.g., sorting). On land
 
+As the catch taken during a fishing set can be stored in different wells, the identifier of each well containing the sampled fish was recorded 
+
+Information on fishing operations are collected from the logbook and well plan of the trip associated.
+
+sampling constraints (e.g., sorting occurring at unloading). 
+
+<!-- traceability is a record-keeping system designed to track the flow of product through the production process or supply chain. -->
+ 
 ## Quality control
 
 Data stored in Tunabio database are systematically checked for integrity. Consistency, validation and formatting controls are carried out when entering the data. Errors can be made at the time of transcription and data entry. Data are therefore controlled with charts, comparison of values, or by checking the timeline for the dates. A correction is made on the basis of the physical data entry sheets on which the data are recorded during the sampling.

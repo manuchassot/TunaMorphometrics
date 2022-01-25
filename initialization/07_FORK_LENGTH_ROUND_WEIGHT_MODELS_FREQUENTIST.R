@@ -1,34 +1,40 @@
 
+print("Frequentist model for fork length - round weight relationship")
+
 # FORK LENGTH - ROUND WEIGHT
 
 LM_FL_RW = function(Dataset, OceanCode, SpeciesCode){
 
-  # Data
-  FORK_LENGTH_ROUND_WEIGHT_DATASET = Dataset[ocean_code == OceanCode & species_code_fao == SpeciesCode & !is.na(fork_length) & !is.na(whole_fish_weight)]
-  SpeciesEnglish    = unique(FORK_LENGTH_ROUND_WEIGHT_DATASET$species_english_name)
-  SpeciesScientific = unique(FORK_LENGTH_ROUND_WEIGHT_DATASET$species_scientific_name)
-  Ocean             = unique(FORK_LENGTH_ROUND_WEIGHT_DATASET$ocean)
-  Color             = as.factor(SPECIES_COL[species_code_fao == SpeciesCode, FILL])  
-  
-  # Model
-  LM_FORK_LENGTH_ROUND_WEIGHT = lm(log10(whole_fish_weight) ~ log10(fork_length), data = FORK_LENGTH_ROUND_WEIGHT_DATASET)
+# Data
+FORK_LENGTH_ROUND_WEIGHT_DATASET = Dataset[ocean_code == OceanCode & species_code_fao == SpeciesCode & !is.na(fork_length) & !is.na(whole_fish_weight)]
+SpeciesEnglish    = unique(FORK_LENGTH_ROUND_WEIGHT_DATASET$species_english_name)
+SpeciesScientific = unique(FORK_LENGTH_ROUND_WEIGHT_DATASET$species_scientific_name)
+Ocean             = unique(FORK_LENGTH_ROUND_WEIGHT_DATASET$ocean)
+Color             = as.factor(SPECIES_COL[species_code_fao == SpeciesCode, FILL])  
 
-  # Inference
-  a_LM_FL_RW <- 10^(coefficients(LM_FORK_LENGTH_ROUND_WEIGHT)[1]) * 10^(var(residuals(LM_FORK_LENGTH_ROUND_WEIGHT))/2)
-  b_LM_FL_RW = coefficients(LM_FORK_LENGTH_ROUND_WEIGHT)[2]
+# Model
+LM_FORK_LENGTH_ROUND_WEIGHT = lm(log10(whole_fish_weight) ~ log10(fork_length), data = FORK_LENGTH_ROUND_WEIGHT_DATASET)
 
-  # Predictions
-  FORK_LENGTH_ROUND_WEIGHT_DATASET[, LOG_ROUND_WEIGHT := log10(whole_fish_weight)]
-  FORK_LENGTH_ROUND_WEIGHT_DATASET[, LOG_ROUND_WEIGHT_PREDICTED := predict.lm(LM_FORK_LENGTH_ROUND_WEIGHT, se.fit = T)$fit]
-  FORK_LENGTH_ROUND_WEIGHT_DATASET[, ROUND_WEIGHT_PREDICTED := 10^(LOG_ROUND_WEIGHT_PREDICTED)]
-  FORK_LENGTH_ROUND_WEIGHT_DATASET[, ROUND_WEIGHT_PREDICTED_BIAS_CORRECTED :=  a_LM_FL_RW*fork_length^b_LM_FL_RW]
+# Inference
+a_LM_FL_RW        = 10^(coefficients(LM_FORK_LENGTH_ROUND_WEIGHT)[1]) 
+a_LM_FL_RW_NEYMAN = 10^(coefficients(LM_FORK_LENGTH_ROUND_WEIGHT)[1]) * 10^(var(residuals(LM_FORK_LENGTH_ROUND_WEIGHT))/2)
+a_LM_FL_RW_SMITH  = 10^(coefficients(LM_FORK_LENGTH_ROUND_WEIGHT)[1]) * exp(var(residuals(LM_FORK_LENGTH_ROUND_WEIGHT))*2.651)  # Smith 1993
+b_LM_FL_RW        = coefficients(LM_FORK_LENGTH_ROUND_WEIGHT)[2]
+
+# Predictions
+FORK_LENGTH_ROUND_WEIGHT_DATASET[, LOG_ROUND_WEIGHT := log10(whole_fish_weight)]
+FORK_LENGTH_ROUND_WEIGHT_DATASET[, LOG_ROUND_WEIGHT_PREDICTED := predict.lm(LM_FORK_LENGTH_ROUND_WEIGHT, se.fit = T)$fit]
+FORK_LENGTH_ROUND_WEIGHT_DATASET[, ROUND_WEIGHT_PREDICTED := 10^(LOG_ROUND_WEIGHT_PREDICTED)]
+FORK_LENGTH_ROUND_WEIGHT_DATASET[, ROUND_WEIGHT_PREDICTED_BIAS_CORRECTED :=  a_LM_FL_RW_SMITH*fork_length^b_LM_FL_RW]
 
 # Data frame for predictions
 FL_RW_PREDICTION = data.table(fork_length = seq(floor(min(FORK_LENGTH_ROUND_WEIGHT_DATASET$fork_length)), ceiling(max(FORK_LENGTH_ROUND_WEIGHT_DATASET$fork_length)), 0.1))
 
-FL_RW_PREDICTION[, whole_fish_weight_predicted := a_LM_FL_RW * fork_length ^ b_LM_FL_RW]
+FL_RW_PREDICTION[, whole_fish_weight_predicted_BIASED := a_LM_FL_RW * fork_length ^ b_LM_FL_RW]
+FL_RW_PREDICTION[, whole_fish_weight_predicted_NEYMAN := a_LM_FL_RW_NEYMAN * fork_length ^ b_LM_FL_RW]
+FL_RW_PREDICTION[, whole_fish_weight_predicted_SMITH  := a_LM_FL_RW_SMITH * fork_length ^ b_LM_FL_RW]
 
-return(list(LM_FORK_LENGTH_ROUND_WEIGHT, FORK_LENGTH_ROUND_WEIGHT_DATASET, FL_RW_PREDICTION))
+return(list(MODEL = LM_FORK_LENGTH_ROUND_WEIGHT, a_LM_FL_RW = a_LM_FL_RW, a_LM_FL_RW_NEYMAN = a_LM_FL_RW_NEYMAN, a_LM_FL_RW_SMITH = a_LM_FL_RW_SMITH, b_LM_FL_RW = b_LM_FL_RW, DATA = FORK_LENGTH_ROUND_WEIGHT_DATASET, PREDICTIONS = FL_RW_PREDICTION))
 }
 
 # Indian Ocean | Bigeye tuna ####
@@ -36,12 +42,18 @@ return(list(LM_FORK_LENGTH_ROUND_WEIGHT, FORK_LENGTH_ROUND_WEIGHT_DATASET, FL_RW
 LM_FL_RW_IO_BET = LM_FL_RW(FULL_DATASET, "IO", "BET")
 
 FORK_LENGTH_ROUND_WEIGHT_FIT_IO_BET =
-  ggplot(LM_FL_RW_IO_BET[[2]], aes(x = fork_length, y = whole_fish_weight)) +
+  ggplot(LM_FL_RW_IO_BET[["DATA"]], aes(x = fork_length, y = whole_fish_weight)) +
   geom_point(shape = 3, size = 0.8, color = "lightblue") +
   theme_bw() +
-  geom_line(data = LM_FL_RW_IO_BET[[3]], aes(x = fork_length, y = whole_fish_weight_predicted), color = "darkblue") +
+#  geom_line(data = LM_FL_RW_IO_BET[["PREDICTIONS"]], aes(x = fork_length, y = whole_fish_weight_predicted_BIASED), color = "green") +
+#  geom_line(data = LM_FL_RW_IO_BET[["PREDICTIONS"]], aes(x = fork_length, y = whole_fish_weight_predicted_NEYMAN), color = "red") +
+  geom_line(data = LM_FL_RW_IO_BET[["PREDICTIONS"]], aes(x = fork_length, y = whole_fish_weight_predicted_SMITH), color = "darkblue") +
   labs(x = "Fork length (cm)", y = "Whole weight (kg)", title = "Bigeye tuna | Indian Ocean") +
 theme(strip.background = element_rect(fill = "white"), strip.text.x = element_text(size = 12), legend.position = "none")
+
+# anova(LM_FL_RW_IO_SKJ["MODEL"]$MODEL)
+# summary(LM_FL_RW_IO_SKJ["MODEL"]$MODEL)
+# plot(LM_FL_RW_IO_SKJ["MODEL"]$MODEL)
 
 ggsave("../outputs/charts/FREQUENTIST/FORK_LENGTH_ROUND_WEIGHT_FIT_IO_BET.png", FORK_LENGTH_ROUND_WEIGHT_FIT_IO_BET, width = 8, height = 4.5)
 
@@ -50,10 +62,10 @@ ggsave("../outputs/charts/FREQUENTIST/FORK_LENGTH_ROUND_WEIGHT_FIT_IO_BET.png", 
 LM_FL_RW_IO_SKJ = LM_FL_RW(FULL_DATASET, "IO", "SKJ")
 
 FORK_LENGTH_ROUND_WEIGHT_FIT_IO_SKJ =
-  ggplot(LM_FL_RW_IO_SKJ[[2]], aes(x = fork_length, y = whole_fish_weight)) +
+  ggplot(LM_FL_RW_IO_SKJ[["DATA"]], aes(x = fork_length, y = whole_fish_weight)) +
   geom_point(shape = 3, size = 0.8, color = "red") +
   theme_bw() +
-  geom_line(data = LM_FL_RW_IO_SKJ[[3]], aes(x = fork_length, y = whole_fish_weight_predicted), color = "darkred") +
+  geom_line(data = LM_FL_RW_IO_SKJ[["PREDICTIONS"]], aes(x = fork_length, y = whole_fish_weight_predicted_SMITH), color = "red", size = 1.2) +
   labs(x = "Fork length (cm)", y = "Whole weight (kg)", title = "Skipjack tuna | Indian Ocean") +
   theme(strip.background = element_rect(fill = "white"), strip.text.x = element_text(size = 12), legend.position = "none")
 
@@ -64,10 +76,10 @@ ggsave("../outputs/charts/FREQUENTIST/FORK_LENGTH_ROUND_WEIGHT_FIT_IO_SKJ.png", 
 LM_FL_RW_IO_YFT = LM_FL_RW(FULL_DATASET, "IO", "YFT")
 
 FORK_LENGTH_ROUND_WEIGHT_FIT_IO_YFT =
-  ggplot(LM_FL_RW_IO_YFT[[2]], aes(x = fork_length, y = whole_fish_weight)) +
+  ggplot(LM_FL_RW_IO_YFT[["DATA"]], aes(x = fork_length, y = whole_fish_weight)) +
   geom_point(shape = 3, size = 0.8, color = "orange") +
   theme_bw() +
-  geom_line(data = LM_FL_RW_IO_YFT[[3]], aes(x = fork_length, y = whole_fish_weight_predicted), color = "red") +
+  geom_line(data = LM_FL_RW_IO_YFT[["PREDICTIONS"]], aes(x = fork_length, y = whole_fish_weight_predicted_SMITH), color = "black", size = 1.2) +
   labs(x = "Fork length (cm)", y = "Whole weight (kg)", title = "Yellowfin tuna | Indian Ocean") +
   theme(strip.background = element_rect(fill = "white"), strip.text.x = element_text(size = 12), legend.position = "none")
 
@@ -78,10 +90,10 @@ ggsave("../outputs/charts/FREQUENTIST/FORK_LENGTH_ROUND_WEIGHT_FIT_IO_YFT.png", 
 LM_FL_RW_AO_BET = LM_FL_RW(FULL_DATASET, "AO", "BET")
 
 FORK_LENGTH_ROUND_WEIGHT_FIT_AO_BET =
-  ggplot(LM_FL_RW_AO_BET[[2]], aes(x = fork_length, y = whole_fish_weight)) +
+  ggplot(LM_FL_RW_AO_BET[["DATA"]], aes(x = fork_length, y = whole_fish_weight)) +
   geom_point(shape = 3, size = 0.8, color = "lightblue") +
   theme_bw() +
-  geom_line(data = LM_FL_RW_AO_BET[[3]], aes(x = fork_length, y = whole_fish_weight_predicted), color = "darkblue") +
+  geom_line(data = LM_FL_RW_AO_BET[["PREDICTIONS"]], aes(x = fork_length, y = whole_fish_weight_predicted_SMITH), color = "darkblue", size = 1.2) +
   labs(x = "Fork length (cm)", y = "Whole weight (kg)", title = "Bigeye tuna | Atlantic Ocean") +
   theme(strip.background = element_rect(fill = "white"), strip.text.x = element_text(size = 12), legend.position = "none")
 
@@ -92,10 +104,10 @@ ggsave("../outputs/charts/FREQUENTIST/FORK_LENGTH_ROUND_WEIGHT_FIT_AO_BET.png", 
 LM_FL_RW_AO_SKJ = LM_FL_RW(FULL_DATASET, "AO", "SKJ")
 
 FORK_LENGTH_ROUND_WEIGHT_FIT_AO_SKJ =
-  ggplot(LM_FL_RW_AO_SKJ[[2]], aes(x = fork_length, y = whole_fish_weight)) +
+  ggplot(LM_FL_RW_AO_SKJ[["DATA"]], aes(x = fork_length, y = whole_fish_weight)) +
   geom_point(shape = 3, size = 0.8, color = "red") +
   theme_bw() +
-  geom_line(data = LM_FL_RW_AO_SKJ[[3]], aes(x = fork_length, y = whole_fish_weight_predicted), color = "black") +
+  geom_line(data = LM_FL_RW_AO_SKJ[["PREDICTIONS"]], aes(x = fork_length, y = whole_fish_weight_predicted_SMITH), color = "red", size = 1.2) +
   labs(x = "Fork length (cm)", y = "Whole weight (kg)", title = "Skipjack tuna | Atlantic Ocean") +
   theme(strip.background = element_rect(fill = "white"), strip.text.x = element_text(size = 12), legend.position = "none")
 
@@ -106,10 +118,10 @@ ggsave("../outputs/charts/FREQUENTIST/FORK_LENGTH_ROUND_WEIGHT_FIT_AO_SKJ.png", 
 LM_FL_RW_AO_YFT = LM_FL_RW(FULL_DATASET, "AO", "YFT")
 
 FORK_LENGTH_ROUND_WEIGHT_FIT_AO_YFT =
-  ggplot(LM_FL_RW_AO_YFT[[2]], aes(x = fork_length, y = whole_fish_weight)) +
+  ggplot(LM_FL_RW_AO_YFT[["DATA"]], aes(x = fork_length, y = whole_fish_weight)) +
   geom_point(shape = 3, size = 0.8, color = "orange") +
   theme_bw() +
-  geom_line(data = LM_FL_RW_AO_YFT[[3]], aes(x = fork_length, y = whole_fish_weight_predicted), color = "red") +
+  geom_line(data = LM_FL_RW_AO_YFT[["PREDICTIONS"]], aes(x = fork_length, y = whole_fish_weight_predicted_SMITH), color = "black", size = 1.2) +
   labs(x = "Fork length (cm)", y = "Whole weight (kg)", title = "Yellowfin tuna | Atlantic Ocean") +
   theme(strip.background = element_rect(fill = "white"), strip.text.x = element_text(size = 12), legend.position = "none")
 

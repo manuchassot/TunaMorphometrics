@@ -18,16 +18,17 @@ nls2_jags <- function(){
   
   # Derived quantities
   tau     = 1 / (sigma * sigma)                  # tau is precision (1 / variance)
-  a       = 10^(log10a)
+  var_res = mean(residual[]^2)
+  cf      = exp(var_res*2.651)                  # correction factor to account for log-transformation
+  a       = 10^(log10a) * cf                    # a corrected for bias
   a_prior = 10^(log10a_prior)
   a1e5_prior = 10^(log10a_prior) * 1e5
   a1e5   = a*1e5
     
   # Assess model using a sums-of-squares-type discrepancy
   for (i in 1:N){
-#    residual[i]  = log10wt[i] - mean_log10wt[i]    # Residuals for observed data
-    residual[i]  = 10^log10wt[i] - 10^mean_log10wt[i]    # Residuals for observed data
-    predicted[i] = 10^mean_log10wt[i]                 # Predicted values
+    residual[i]  = log10wt[i] - mean_log10wt[i]    # Residuals for observed data
+    predicted[i] = mean_log10wt[i]                 # Predicted values
     sq[i]        = pow(residual[i], 2)             # Square residuals for observed data
     
     # Generate replicate data and compute fit stats for them
@@ -43,9 +44,9 @@ nls2_jags <- function(){
 }
 
 ## DATA ####
-FORK_LENGTH_ROUND_WEIGHT_DATASET = FULL_DATASET[ocean_code == "IO" & species_code_fao == "BET" & !is.na(fork_length) & !is.na(whole_fish_weight)]
+FORK_LENGTH_ROUND_WEIGHT_DATASET_IO_BET = FULL_DATASET[ocean_code == "IO" & species_code_fao == "BET" & !is.na(fork_length) & !is.na(whole_fish_weight)]
 
-JAGS_DATA = with(FORK_LENGTH_ROUND_WEIGHT_DATASET, list(log10fl = log(fork_length)/log(10), log10wt = log(whole_fish_weight)/log(10), N = FORK_LENGTH_ROUND_WEIGHT_DATASET[, .N]))
+JAGS_DATA_IO_BET = with(FORK_LENGTH_ROUND_WEIGHT_DATASET_IO_BET, list(log10fl = log(fork_length)/log(10), log10wt = log(whole_fish_weight)/log(10), N = FORK_LENGTH_ROUND_WEIGHT_DATASET_IO_BET[, .N]))
 
 ## PARAMETERS TO ESTIMATE ####
 params = c("log10a_prior", "log10a", "b_prior", "b", "sigma", "sigma_prior", "a", "a_prior", "a1e5", "a1e5_prior", "fit", "fit.new", "bpvalue", "residual", "predicted")
@@ -64,16 +65,18 @@ ni = 12000
 nb = 2000
 nt = 10
 
-FL_RW_MODEL = jags(data = JAGS_DATA, inits = init_values, parameters.to.save = params, model.file = nls2_jags, n.chains = nc, n.iter = ni, n.burnin = nb, n.thin = nt, DIC = T)
+FL_RW_MODEL = jags(data = JAGS_DATA_IO_BET, inits = init_values, parameters.to.save = params, model.file = nls2_jags, n.chains = nc, n.iter = ni, n.burnin = nb, n.thin = nt, DIC = T)
 
 # OUTPUTS ####
+
+MODEL_SUMMARY = as.data.table(FL_RW_MODEL$BUGSoutput$summary, keep.rownames = TRUE)
+
+ITERATIONS = FL_RW_MODEL$BUGSoutput$n.sims
 
 ## CONVERGENCE ####
 
 # Brooks-Gelman-Rubin statistic (Rhat)
 # Expected value at convergence: 1
-
-MODEL_SUMMARY = as.data.table(FL_RW_MODEL$BUGSoutput$summary, keep.rownames = TRUE)
 
 # Histogram of all Rhats
 ggplot(MODEL_SUMMARY, aes(x = Rhat)) +
@@ -81,17 +84,14 @@ ggplot(MODEL_SUMMARY, aes(x = Rhat)) +
   theme_bw()
 
 # Diagnostic plots for each parameter
-ggplot(MODEL_SUMMARY[rn %in% c("a1e5"), .(rn, Rhat)], aes(x = 1:ITERATIONS, y = Rhat)) +
-  geom_line(col = "lightgrey") +
-  theme_bw() +
-  facet_wrap(~rn)
+# #ggplot(MODEL_SUMMARY[rn %in% c("a1e5", "a", "b", ""), .(rn, Rhat)], aes(x = 1:ITERATIONS, y = Rhat)) +
+#   geom_line(col = "lightgrey") +
+#   theme_bw() +
+#   facet_wrap(~rn)
 
 ## MODEL FIT ####
 
-
 ## PRIOR & POSTERIOR PARAMETERS ####
-
-ITERATIONS = FL_RW_MODEL$BUGSoutput$n.sims
 
 PARAMETERS = c("a1e5_prior", "a1e5", "b_prior", "b", "sigma_prior", "sigma")
 
@@ -133,20 +133,13 @@ ggplot(PARAMETERS_POSTERIORS[PARAM == "b"], aes(x = VALUE)) +
   theme_bw() +
   labs(x = "value", y = "Density")
 
-
-
-
-
-
-
-
 ## PREDICTIONS ####
 
 ### Extract mean values of a & b
-MEAN_PREDICTIONS = as.numeric(FL_RW_MODEL$BUGSoutput$mean$a) * (10^JAGS_DATA$log10fl) ^ as.numeric(FL_RW_MODEL$BUGSoutput$mean$b)
+MEAN_PREDICTIONS = as.numeric(FL_RW_MODEL$BUGSoutput$mean$a) * (10^JAGS_DATA_IO_BET$log10fl) ^ as.numeric(FL_RW_MODEL$BUGSoutput$mean$b)
 
 ### Array of predictions (rows = observations, columns = samples)
-PREDICTIONS = array(dim = c(JAGS_DATA$N, FL_RW_MODEL$BUGSoutput$n.sims))
+PREDICTIONS = array(dim = c(JAGS_DATA_IO_BET$N, FL_RW_MODEL$BUGSoutput$n.sims))
 
 for (i in 1:JAGS_DATA$N){
   
@@ -173,6 +166,9 @@ UPPER_WEIGHT_PREDICTIONS = as.data.frame(cbind(fork_length, whole_fish_weight_pr
 LOWER_WEIGHT_PREDICTIONS = as.data.frame(cbind(fork_length, whole_fish_weight_predicted_lower = apply(WEIGHT_PREDICTIONS, 2, quantile, 0.025, na.rm = TRUE)))
 
 ## Plot the observations and predictions ####
+
+
+# Re-expressed in fork length and weight
 
 LW_RW_FIT_CHART =
 ggplot(FORK_LENGTH_ROUND_WEIGHT_DATASET, aes(x = fork_length, y = whole_fish_weight)) +

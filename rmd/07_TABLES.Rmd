@@ -1,0 +1,18 @@
+
+# Tables
+
+```{r MeasurementTable, tab.cap = ""}
+MEASUREMENTS_TABLE = data.table(read.xlsx("../inputs/data/Table_Measurements.xlsx"))
+
+MEASUREMENTS_TABLE_FT = 
+  MEASUREMENTS_TABLE %>% 
+  flextable() %>%
+  compose(i = 2, j = "Notation", value = as_paragraph("L", as_sub("F"))) %>%
+  compose(i = 3, j = "Notation", value = as_paragraph("L", as_sub("T"))) %>%
+  compose(i = 4, j = "Notation", value = as_paragraph("L", as_sub("D"))) %>%
+  compose(i = 5, j = "Notation", value = as_paragraph("W", as_sub("T"))) %>%
+  width(width = c(0.8, 2.4, 10, 0.5, 0.8))
+
+MEASUREMENTS_TABLE_FT
+```
+

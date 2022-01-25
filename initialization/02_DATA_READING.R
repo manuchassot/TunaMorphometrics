@@ -1,4 +1,6 @@
 
+print("Read morphometric data...")
+
 # Data collected as per EU (DCF and EUMAP) ####
 
 ## Indian Ocean ####
@@ -59,3 +61,5 @@ IO_IOTTP     = fread("../inputs/data/data_iottp_fl_wt_2009_2015.csv")
 IO_IOTTP[, ocean_code := "IO"]
 names(IO_IOTTP) = c("project", "sampling_year", "species_code_fao", "sex", "fork_length", "whole_fish_weight", "ocean_code")
 IO_IOTTP[sex == "", sex := NA]
+
+print("Morphometric data read")

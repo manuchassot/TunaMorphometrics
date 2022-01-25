@@ -1,4 +1,6 @@
 
+print("Consolidate morphometric data...")
+
 # CONSOLIDATE DCF/EUMAP DATA SETS ####
 
 # Combine both data sets
@@ -97,3 +99,4 @@ SAMPLES_VARIABLES = RAW_SAMPLES_WITH_ENVIRONMENT[!fish_identifier %in% ID_REPLIC
 
 #toto1[, SF := st_union(rgeos::readWKT(GEOM)), keyby = .(FISH_ID)]
 
+print("Morphometric data consolidated!")

@@ -1,4 +1,6 @@
 
+print("Initialise review of length-weight parameters for tropical tuna...")
+
 # Literature review on a and b parameters
 
 # FISHBASE ####
@@ -12,10 +14,12 @@ FISHBASE_LW_RAW = as.data.table(length_weight(species_list = c("Katsuwonus pelam
 # Add references
 FISHBASE_LW = merge(FISHBASE_LW_RAW, FISHBASE_REF, by.x = "PopLWRef", by.y = "RefNo", all.x = TRUE)[, PopLWRef := NULL]
 
+setnames(FISHBASE_LW, "Species", "SpeciesScientific") 
+
 # Add species code
-FISHBASE_LW[Species == "Thunnus obesus", SpeciesCode := "BET"]
-FISHBASE_LW[Species == "Katsuwonus pelamis", SpeciesCode := "SKJ"]
-FISHBASE_LW[Species == "Thunnus albacares", SpeciesCode := "YFT"]
+FISHBASE_LW[SpeciesScientific == "Thunnus obesus",     `:=` (Species = "Bigeye tuna", SpeciesCode = "BET")]
+FISHBASE_LW[SpeciesScientific == "Katsuwonus pelamis", `:=` (Species = "Skipjack tuna", SpeciesCode = "SKJ")]
+FISHBASE_LW[SpeciesScientific == "Thunnus albacares",  `:=` (Species = "Yellowfin tuna", SpeciesCode = "YFT")]
 
 # Add oceans
 FISHBASE_LW[grep("South Carolina", Locality), Ocean := "Atlantic Ocean"]
@@ -56,10 +60,10 @@ FISHBASE_LW = FISHBASE_LW[AuthorStd != "Andrade, H.A.; Campos, R.O."]
 FISHBASE_LW = FISHBASE_LW[AuthorStd != "Uchiyama, J.H."]
 
 # Delete records without info on n or with less than 100 fish
-FISHBASE_LW = FISHBASE_LW[!is.na(Number) & Number>=100]
+#FISHBASE_LW = FISHBASE_LW[!is.na(Number) & Number>=100]
 
 # a parameters for FL -> RW relationship
-FISHBASE_PARAMS = FISHBASE_LW[LengthType == "FL", .(Species, SpeciesCode, Sex, Ocean, Number, ForkLengthMin = LengthMin, ForkLengthMax = LengthMax, a = a/1000, b, Source = AuthorStd)][, ORIGIN := "FISHBASE"]
+FISHBASE_PARAMS = FISHBASE_LW[LengthType == "FL", .(SpeciesScientific, Species, SpeciesCode, Sex, Ocean, Number, ForkLengthMin = LengthMin, ForkLengthMax = LengthMax, a = a/1000, b, Source = AuthorStd)][, ORIGIN := "FISHBASE"]
 
 #write.xlsx(FISHBASE_PARAMS, file = "../inputs/data/FISHBASE_PARAMS.xlsx")
 
@@ -72,16 +76,19 @@ OTHER_PARAMS = data.table(read.xlsx("../inputs/data/TRFMO_PARAMETERS.xlsx", shee
 
 FL_RW_PARAMS = rbindlist(list(FISHBASE_PARAMS, TRFMO_PARAMS, OTHER_PARAMS), use.names = TRUE)
 
+# Factorize and order the species
+FL_RW_PARAMS[, Species := factor(Species, levels = c("Bigeye tuna", "Skipjack tuna", "Yellowfin tuna"))]
+
 # Statistics
 FL_RW_PARAMS[, as.list(summary(a*1e5)), keyby = .(Species, SpeciesCode)]
+FL_RW_PARAMS[, as.list(summary(b)), keyby = .(Species, SpeciesCode)]
 
 FL_RW_PARAMS_ab_BIPLOT =
 ggplot(FL_RW_PARAMS, aes(x = a*1e5, y = b, color = Species, shape = Species)) +
   geom_point(size = 2.5) +
   theme_bw() +
   labs(x = expression(paste("a x 1", e^{-5})), y = "b") +
-  theme(legend.position = "bottom") +
-  theme(legend.title = element_blank(), legend.text = element_text(face = "italic"))
+  theme(legend.position = "bottom", legend.title = element_blank())
 
 ggsave(filename = "../outputs/charts/PRIORS/FL_RW_PARAMS_ab_BIPLOT.png", plot = FL_RW_PARAMS_ab_BIPLOT, width = 8, height = 6)
 
@@ -92,16 +99,14 @@ ggplot(FL_RW_PARAMS, aes(x = a*1e5, y = Species, fill = Species)) +
   geom_boxplot() +
   theme_bw() +
   labs(x = expression(paste("a x 1", e^{-5})), y = "") +
-  theme(legend.position = "none") +
-  theme(axis.text.y = element_text(face = "italic"))
-  
+  theme(legend.position = "none")
+
 FL_RW_PARAMS_b_PLOT =
 ggplot(FL_RW_PARAMS, aes(x = b, y = Species, fill = Species)) +
   geom_boxplot() +
   theme_bw() +
   labs(x = "b", y = "") +
-  theme(legend.position = "none") +
-  theme(axis.text.y = element_text(face = "italic"))
+  theme(legend.position = "none")
 
 FL_RW_PARAMS_ab_PLOT  = FL_RW_PARAMS_a_PLOT + FL_RW_PARAMS_b_PLOT
 
@@ -111,3 +116,4 @@ FL_RW_PARAMS_ab_PLOT[[2]] = FL_RW_PARAMS_ab_PLOT[[2]] + theme(axis.text.y = elem
 
 ggsave(filename = "../outputs/charts/PRIORS/FL_RW_PARAMS_ab_MARGINAL_PLOTS.png", plot = FL_RW_PARAMS_ab_PLOT, width = 8, height = 4.5)
 
+print("Length-weight parameters for tropical tuna reviewed!")
