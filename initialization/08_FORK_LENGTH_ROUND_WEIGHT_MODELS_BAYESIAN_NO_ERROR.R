@@ -52,8 +52,12 @@ JAGS_DATA_IO_BET = with(FORK_LENGTH_ROUND_WEIGHT_DATASET_IO_BET, list(log10fl = 
 params = c("log10a_prior", "log10a", "b_prior", "b", "sigma", "sigma_prior", "a", "a_prior", "a1e5", "a1e5_prior", "fit", "fit.new", "bpvalue", "residual", "predicted")
 
 ## INITIALIZATION FUNCTION ####
+#init_values = function(){
+#  list(log10a = rnorm(1, mean = 0, sd = 1), b = runif(1, 1, 6), sigma = runif(1, min = 0, max = 1))
+#}
+
 init_values = function(){
-  list(log10a = rnorm(1, mean = 0, sd = 1), b = runif(1, 1, 6), sigma = runif(1, min = 0, max = 1))
+  list()
 }
 
 # STATISTICAL INFERENCE ####
@@ -84,7 +88,7 @@ ggplot(MODEL_SUMMARY, aes(x = Rhat)) +
   theme_bw()
 
 # Diagnostic plots for each parameter
-# #ggplot(MODEL_SUMMARY[rn %in% c("a1e5", "a", "b", ""), .(rn, Rhat)], aes(x = 1:ITERATIONS, y = Rhat)) +
+# ggplot(MODEL_SUMMARY[rn %in% c("a1e5"), .(rn, Rhat)], aes(x = 1:ITERATIONS, y = Rhat)) +
 #   geom_line(col = "lightgrey") +
 #   theme_bw() +
 #   facet_wrap(~rn)
@@ -113,25 +117,31 @@ ggplot(data = PARAMETERS_POSTERIORS, aes(x = VALUE)) +
   facet_wrap(~PARAM, scale = "free", ) +
   theme(strip.background = element_rect(fill = "white"))
 
-ggsave("../outputs/charts/BAYESIAN/PRIORS_POSTERIORS_CHART.png", PRIORS_POSTERIORS_CHART, width = 8, height = 4.5)
+ggsave("../outputs/charts/BAYESIAN/NO_ERROR/PRIORS_POSTERIORS_CHART.png", PRIORS_POSTERIORS_CHART, width = 8, height = 4.5)
 
 a_PRIOR = data.table(a = 10^(rnorm(1000, mean = -4.589, sd = sqrt(1/21))) * 1e5)
 a_PRIOR[, REL := a/sum(a)]
 
+PRIOR_POSTERIOR_a =
 ggplot(PARAMETERS_POSTERIORS[PARAM == "a1e5"], aes(x = VALUE)) +
   geom_density() +
   geom_density(data = a_PRIOR, aes(x = a), size = 1.2, color = "red") +
   theme_bw() +
   labs(x = "value", y = "Density")
 
+ggsave("../outputs/charts/BAYESIAN/NO_ERROR/PRIOR_POSTERIOR_a.png", PRIOR_POSTERIOR_a, width = 8, height = 4.5)
+
 b_PRIOR = data.table(b = rnorm(1000, mean = 2.955, sd = sqrt(1/91)))
 b_PRIOR[, REL := b/sum(b)]
 
-ggplot(PARAMETERS_POSTERIORS[PARAM == "b"], aes(x = VALUE)) +
+PRIOR_POSTERIOR_b =
+  ggplot(PARAMETERS_POSTERIORS[PARAM == "b"], aes(x = VALUE)) +
   geom_density() +
   geom_density(data = b_PRIOR, aes(x = b), size = 1.2, color = "red") +
   theme_bw() +
   labs(x = "value", y = "Density")
+
+ggsave("../outputs/charts/BAYESIAN/NO_ERROR/PRIOR_POSTERIOR_b.png", PRIOR_POSTERIOR_b, width = 8, height = 4.5)
 
 ## PREDICTIONS ####
 
@@ -181,4 +191,4 @@ ggplot(FORK_LENGTH_ROUND_WEIGHT_DATASET, aes(x = fork_length, y = whole_fish_wei
   geom_line(data = UPPER_WEIGHT_PREDICTIONS, aes(x = fork_length, y = whole_fish_weight_predicted_upper), color = "darkblue", linetype = 2) +
   geom_line(data = LOWER_WEIGHT_PREDICTIONS, aes(x = fork_length, y = whole_fish_weight_predicted_lower), color = "darkblue", linetype = 2)
 
-ggsave("../outputs/charts/BAYESIAN/LW_RW_FIT_CHART.png", LW_RW_FIT_CHART, width = 8, height = 4.5)
+ggsave("../outputs/charts/BAYESIAN/NO_ERROR/LW_RW_FIT_CHART_IO_BET.png", LW_RW_FIT_CHART, width = 8, height = 4.5)
