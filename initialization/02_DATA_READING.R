@@ -25,7 +25,7 @@ IO_INDIC_NO_GEOMETRY = is.na(IO_RAW_SAMPLES_WITH_ENVIRONMENT2$geometry)
 IO_RAW_SAMPLES_WITH_ENVIRONMENT3 = IO_RAW_SAMPLES_WITH_ENVIRONMENT2[!IO_INDIC_NO_GEOMETRY]
 
 ## Atlantic Ocean ####
-AO_RAW_SAMPLES_WITH_ENVIRONMENT = fread("../inputs/data/AAD ATL Chassot 2021.txt")#[!is.na(geometry)]
+AO_RAW_SAMPLES_WITH_ENVIRONMENT = fread("../inputs/data/AAD ATL Chassot 2021.txt")
 
 # TEMP
 # Replace ";" by " " in geometry
