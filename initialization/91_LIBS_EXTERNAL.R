@@ -28,6 +28,7 @@ p_load(
   "R2jags",
   "mcmcplots",
   "coda",
-  "boa"
+  "boa",
+  "wellknown"
   )
 

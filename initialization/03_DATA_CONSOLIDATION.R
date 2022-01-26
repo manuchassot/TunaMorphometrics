@@ -4,7 +4,7 @@ print("Consolidate morphometric data...")
 # CONSOLIDATE DCF/EUMAP DATA SETS ####
 
 # Combine both data sets
-RAW_SAMPLES_WITH_ENVIRONMENT = rbindlist(list(AO_RAW_SAMPLES_WITH_ENVIRONMENT1, IO_RAW_SAMPLES_WITH_ENVIRONMENT3))
+RAW_SAMPLES_WITH_ENVIRONMENT = rbindlist(list(AO_RAW_SAMPLES_WITH_ENVIRONMENT2, IO_RAW_SAMPLES_WITH_ENVIRONMENT3))
 
 # Format sampling date
 RAW_SAMPLES_WITH_ENVIRONMENT[, fish_sampling_date := as.POSIXct(fish_sampling_date)] 
@@ -26,15 +26,84 @@ RAW_SAMPLES_WITH_ENVIRONMENT[sex == "H", sex := "M"] # assumption that H is MALE
 RAW_SAMPLES_WITH_ENVIRONMENT[sex == "NA", sex := NA]
 RAW_SAMPLES_WITH_ENVIRONMENT[sex == "", sex := NA]
 
+# Update vessel storage mode
+RAW_SAMPLES_WITH_ENVIRONMENT[vessel_storage_mode == "brine", vessel_storage_mode := "Brine"]
+RAW_SAMPLES_WITH_ENVIRONMENT[vessel_name %in% c("ARTZA", "CAP SAINTE MARIE", "GLENAN", "TORRE ITALIA"), vessel_storage_mode := "Brine"]
+RAW_SAMPLES_WITH_ENVIRONMENT[is.na(vessel_storage_mode), vessel_storage_mode := "Unknow"]
+
+# Update devices
+RAW_SAMPLES_WITH_ENVIRONMENT[measuring_device_1 == "Calliper", measuring_device_1 := "calliper"]
+RAW_SAMPLES_WITH_ENVIRONMENT[measuring_device_2 == "Calliper", measuring_device_2 := "calliper"]
+
 # Format fishing dates
 RAW_SAMPLES_WITH_ENVIRONMENT[, fishing_date_min := as.POSIXct(fishing_date_min)]
 RAW_SAMPLES_WITH_ENVIRONMENT[, fishing_date_max := as.POSIXct(fishing_date_max)]
 RAW_SAMPLES_WITH_ENVIRONMENT[, fishing_date := as.POSIXct(fishing_date)]
 
-# Update fishing date with average fishing date when missing
-#RAW_SAMPLES_WITH_ENVIRONMENT[is.na(fishing_date) & !is.na(fishing_date_min)] 
+# Add fields
+RAW_SAMPLES_WITH_ENVIRONMENT[, stock := paste(ocean_code, species_code_fao, sep = " | ")]
+RAW_SAMPLES_WITH_ENVIRONMENT[, species_code_fao := as.factor(species_code_fao)]
+RAW_SAMPLES_WITH_ENVIRONMENT[, sex := as.factor(sex)]
+RAW_SAMPLES_WITH_ENVIRONMENT[species_code_fao == "BET", `:=` (species_english_name = "Bigeye tuna", species_scientific_name = "Thunnus obesus")]
+RAW_SAMPLES_WITH_ENVIRONMENT[species_code_fao == "SKJ", `:=` (species_english_name = "Skipjack tuna", species_scientific_name = "Katsuwonus pelamis")]
+RAW_SAMPLES_WITH_ENVIRONMENT[species_code_fao == "YFT", `:=` (species_english_name = "Yellowfin tuna", species_scientific_name = "Thunnus albacares")]
+RAW_SAMPLES_WITH_ENVIRONMENT[ocean_code == "AO", ocean := "Atlantic Ocean"]
+RAW_SAMPLES_WITH_ENVIRONMENT[ocean_code == "IO", ocean := "Indian Ocean"]
 
+# SPLIT DATA SETS INTO THREE COMPONENTS ####
+
+# Single geometry
+
+FISH_IDENTIFIERS_SINGLE_ENVIRONMENT = RAW_SAMPLES_WITH_ENVIRONMENT[, .N, by = .(fish_identifier)][N == 1, fish_identifier]
+
+RAW_SAMPLES_WITH_ENVIRONMENT_SINGLE = RAW_SAMPLES_WITH_ENVIRONMENT[fish_identifier %in% FISH_IDENTIFIERS_SINGLE_ENVIRONMENT]
+
+RAW_SAMPLES_WITH_ENVIRONMENT_MULTIPLE = RAW_SAMPLES_WITH_ENVIRONMENT[!fish_identifier %in% FISH_IDENTIFIERS_SINGLE_ENVIRONMENT]
+
+# Single geometry of type MULTIPOINT
+
+RAW_SAMPLES_WITH_ENVIRONMENT_SINGLE_MULTIPOINT = RAW_SAMPLES_WITH_ENVIRONMENT_SINGLE[grep("MULTI", RAW_SAMPLES_WITH_ENVIRONMENT_SINGLE$geometry)]
+
+RAW_SAMPLES_WITH_ENVIRONMENT_SINGLE_MULTIPOINT[, LONG_CENTROID := mean(get_centroid(geometry)[, 1]), by = .(fish_identifier)]
+
+RAW_SAMPLES_WITH_ENVIRONMENT_SINGLE_MULTIPOINT[, LAT_CENTROID := mean(get_centroid(geometry)[, 2]), by = .(fish_identifier)]
+
+# Single geometry of type POINT
+
+RAW_SAMPLES_WITH_ENVIRONMENT_SINGLE_POINT = RAW_SAMPLES_WITH_ENVIRONMENT_SINGLE[!grep("MULTI", RAW_SAMPLES_WITH_ENVIRONMENT_SINGLE$geometry)]
+
+RAW_SAMPLES_WITH_ENVIRONMENT_SINGLE_POINT[, LONG_CENTROID := get_centroid(geometry)[1], by = .(fish_identifier)]
+
+RAW_SAMPLES_WITH_ENVIRONMENT_SINGLE_POINT[, LAT_CENTROID := get_centroid(geometry)[2], by = .(fish_identifier)]
+
+
+# Multiple geometry of type POINT
+
+RAW_SAMPLES_WITH_ENVIRONMENT_SINGLE = RAW_SAMPLES_WITH_ENVIRONMENT[fish_identifier %in% FISH_IDENTIFIERS_SINGLE_ENVIRONMENT]
+
+RAW_SAMPLES_WITH_ENVIRONMENT_SINGLE_SF = st_as_sf(as.data.frame(RAW_SAMPLES_WITH_ENVIRONMENT_SINGLE), wkt = "geometry")
+
+
+# RAW_SAMPLES_WITH_ENVIRONMENT_SINGLE[, LONG_CENTROID := wellknown::get_centroid(geometry)[1], by = .(fish_identifier)]
+# RAW_SAMPLES_WITH_ENVIRONMENT_SINGLE[, LAT_CENTROID := wellknown::get_centroid(geometry)[2], by = .(fish_identifier)]
+
+# Consolidate fishing dates
+
+# Remove fishing_date_min and fishing_date_max if equal to fishing_date
+RAW_SAMPLES_WITH_ENVIRONMENT[fishing_date == fishing_date_min & fishing_date == fishing_date_max, `:=` (fishing_date_min = NA, fishing_date_max = NA)]
+
+# TEMP
+# popo = RAW_SAMPLES_WITH_ENVIRONMENT[!is.na(fishing_date) & !is.na(fishing_date_min) & ocean_code == "IO"]
+# popo[, `:=` (fish_sampling_date = as.Date(fish_sampling_date), landing_date = as.Date(landing_date), fishing_date = as.Date(fishing_date), fishing_date_min = as.Date(fishing_date_min), fishing_date_max = as.Date(fishing_date_max))]
+# write.xlsx(popo, file = "./outputs/TUNA_FISHING_DATES_QUESTION_TF.xlsx")
+
+# Remove fishing_date_min and fishing_date_max if fishing_date not null
 RAW_SAMPLES_WITH_ENVIRONMENT[!is.na(fishing_date), `:=` (fishing_date_min = NA, fishing_date_max = NA)]
+
+
+
+
+
 
 # Compute "average" date when only min and max are available
 RAW_SAMPLES_WITH_ENVIRONMENT[is.na(fishing_date), fishing_date_avg := as.Date(fishing_date_min + difftime(fishing_date_max, fishing_date_min, units = "days")/2, format = "%Y-%m-%d")]
@@ -47,14 +116,13 @@ RAW_SAMPLES_WITH_ENVIRONMENT[, fishing_date_avg := as.POSIXct(fishing_date_avg)]
 RAW_SAMPLES_WITH_ENVIRONMENT[is.na(fishing_date), fishing_date_range := as.numeric(difftime(fishing_date_max, fishing_date_min, units = "days"))]
 RAW_SAMPLES_WITH_ENVIRONMENT[!is.na(fishing_date), fishing_date_range := as.numeric(difftime(max(fishing_date), min(fishing_date), units = "days")), by = .(fish_identifier)]
 
-# Update vessel storage mode
-RAW_SAMPLES_WITH_ENVIRONMENT[vessel_storage_mode == "brine", vessel_storage_mode := "Brine"]
-RAW_SAMPLES_WITH_ENVIRONMENT[vessel_name %in% c("ARTZA", "CAP SAINTE MARIE", "GLENAN", "TORRE ITALIA"), vessel_storage_mode := "Brine"]
-RAW_SAMPLES_WITH_ENVIRONMENT[is.na(vessel_storage_mode), vessel_storage_mode := "Unknow"]
 
-# Update devices
-RAW_SAMPLES_WITH_ENVIRONMENT[measuring_device_1 == "Calliper", measuring_device_1 := "calliper"]
-RAW_SAMPLES_WITH_ENVIRONMENT[measuring_device_2 == "Calliper", measuring_device_2 := "calliper"]
+
+
+
+
+# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 
 # DEFINE DATA SETS ####
 AO_EU_DATASET = unique(RAW_SAMPLES_WITH_ENVIRONMENT[ocean_code == "AO", .(ocean_code, project, sampling_year, species_code_fao, sex, fork_length, whole_fish_weight)])
@@ -63,11 +131,10 @@ IO_EU_DATASET = unique(RAW_SAMPLES_WITH_ENVIRONMENT[ocean_code == "IO", .(ocean_
 
 FULL_DATASET = rbindlist(list(AO_EU_DATASET, IO_EU_DATASET, IO_EMOTION, IO_FONTENEAU, IO_OTHERS, IO_IOTTP), use.names = TRUE, fill = TRUE)
 
-# Consolidate FULL LENGTH_WEIGHT DATA SET 
+# Consolidate FULL LENGTH_WEIGHT DATA SET
 FULL_DATASET[, stock := paste(ocean_code, species_code_fao, sep = " | ")]
 FULL_DATASET[, species_code_fao := as.factor(species_code_fao)]
 FULL_DATASET[, sex := as.factor(sex)]
-#FULL_DATASET[sex %in% c("", "NA"), sex := NA]
 FULL_DATASET[species_code_fao == "BET", `:=` (species_english_name = "Bigeye tuna", species_scientific_name = "Thunnus obesus")]
 FULL_DATASET[species_code_fao == "SKJ", `:=` (species_english_name = "Skipjack tuna", species_scientific_name = "Katsuwonus pelamis")]
 FULL_DATASET[species_code_fao == "YFT", `:=` (species_english_name = "Yellowfin tuna", species_scientific_name = "Thunnus albacares")]
