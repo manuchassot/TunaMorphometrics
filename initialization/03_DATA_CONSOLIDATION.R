@@ -117,7 +117,6 @@ RAW_SAMPLES_WITH_ENVIRONMENT_MULTIPLE_POINTS[, LAT_CENTROID := get_centroid(geom
 
 #write.xlsx(FISH_IDENTIFIER_MIX_MULTI_SINGLE_POINT, file = "../inputs/data/FISH_IDENTIFIER_MIX_MULTI_SINGLE_POINT.xlsx")
 
-
 # COMBINE THE THREE DATA SETS IN A SINGLE ONE ####
 
 SAMPLES_WITH_ENVIRONMENT = rbindlist(list(RAW_SAMPLES_WITH_ENVIRONMENT_SINGLE_MULTIPOINT, RAW_SAMPLES_WITH_ENVIRONMENT_SINGLE_POINT, RAW_SAMPLES_WITH_ENVIRONMENT_MULTIPLE_POINTS)) 
@@ -132,20 +131,18 @@ SAMPLES_WITH_ENVIRONMENT[!is.na(fishing_date), `:=` (fishing_date_min = NA, fish
 
 #=========== 
 
-# Compute "average" date when only min and max are available
-RAW_SAMPLES_WITH_ENVIRONMENT[is.na(fishing_date), fishing_date_avg := as.Date(fishing_date_min + difftime(fishing_date_max, fishing_date_min, units = "days")/2, format = "%Y-%m-%d")]
+# Compute "average" date
 
-RAW_SAMPLES_WITH_ENVIRONMENT[!is.na(fishing_date), fishing_date_avg := as.POSIXct(min(fishing_date) + difftime(max(fishing_date), min(fishing_date), units = 'days')/2, format = "%Y-%m-%d"), by = .(fish_identifier)]
+SAMPLES_WITH_ENVIRONMENT[!is.na(fishing_date), fishing_date_avg := as.POSIXct(fishing_date)]
 
-RAW_SAMPLES_WITH_ENVIRONMENT[, fishing_date_avg := as.POSIXct(fishing_date_avg)]
+#SAMPLES_WITH_ENVIRONMENT[is.na(fishing_date), fishing_date_avg := as.Date(fishing_date_min + difftime(fishing_date_max, fishing_date_min, units = "days")/2, format = "%Y-%m-%d")]
+
+SAMPLES_WITH_ENVIRONMENT[is.na(fishing_date), fishing_date_avg := as.POSIXct(min(fishing_date_min) + difftime(max(fishing_date_max), min(fishing_date_min), units = 'days')/2, format = "%Y-%m-%d"), by = .(fish_identifier)]
 
 # Add fishing date range
-RAW_SAMPLES_WITH_ENVIRONMENT[is.na(fishing_date), fishing_date_range := as.numeric(difftime(fishing_date_max, fishing_date_min, units = "days"))]
-RAW_SAMPLES_WITH_ENVIRONMENT[!is.na(fishing_date), fishing_date_range := as.numeric(difftime(max(fishing_date), min(fishing_date), units = "days")), by = .(fish_identifier)]
+SAMPLES_WITH_ENVIRONMENT[is.na(fishing_date), fishing_date_range := as.numeric(difftime(fishing_date_max, fishing_date_min, units = "days"))]
 
-
-
-
+SAMPLES_WITH_ENVIRONMENT[!is.na(fishing_date), fishing_date_range := 0]
 
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

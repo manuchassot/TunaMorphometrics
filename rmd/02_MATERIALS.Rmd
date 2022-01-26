@@ -5,7 +5,7 @@
 
 Most sampling operations were conducted at tuna processing factories located in Abidjan (Côte d'Ivoire) and Victoria (Seychelles) through agreements with the companies to comply with health and quality manufacturer practices and not delay processing operations [@Marsac2006; @Chassot2014]. Access to the canneries and processing lines varied over time according to management policy and staff availability, which resulted in unbalanced sampling design (**Table 1**). In complement, some tunas were sampled during tagging and recovery operations conducted throughout the Indian Ocean Regional Tuna Tagging Programme (IO-RTTP) and during some research projects conducted on the ecology of tropical tuna in the region [@Murua2015; @Bodin2018].
 
-## Fish traceability
+## Tuna traceability
 
 Traceability relies on the ability of accurately and precisely determining the origin of the fish sampled, i.e., the geographic location where and date when the fish was caught. Hence, it depends on the information recorded and available at each stage of the production process, from fishing to processing. In the case of measurements performed at sea (e.g., fisheries observers), traceability is easy to establish. In the case of sampling at processing factories, traceability may be more difficult to achieve as it can be affected by (i) fish handling and storing procedures onboard the vessels (e.g., sorting by species prior to loading into freezing wells), (ii) mix of fish from different wells during unloading (e.g., several wells concurrently unloaded on the same conveyor belt), and (iii) mix of fish from different origins in the cannery.
 
