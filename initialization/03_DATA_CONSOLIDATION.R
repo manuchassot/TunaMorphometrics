@@ -6,6 +6,23 @@ print("Consolidate morphometric data...")
 # Combine both data sets
 RAW_SAMPLES_WITH_ENVIRONMENT = rbindlist(list(AO_RAW_SAMPLES_WITH_ENVIRONMENT2, IO_RAW_SAMPLES_WITH_ENVIRONMENT3))
 
+# TEMP: REMOVE samples with obvious errors
+
+# 1- Remove fish with duplicates of fish identifiers
+FISH_IDENTIFIER_TWO_OCEANS = data.table(read.xlsx("../inputs/data/FISH_IDENTIFIER_TWO_OCEANS.xlsx", colNames = TRUE))
+
+RAW_SAMPLES_WITH_ENVIRONMENT = RAW_SAMPLES_WITH_ENVIRONMENT[!(fish_identifier %in% FISH_IDENTIFIER_TWO_OCEANS$fish_identifier)]
+
+# 2- Remove rows of environment duplicated in MULTIPOINT
+
+FISH_IDENTIFIER_MIX_MULTI_SINGLE_POINT = data.table(read.xlsx("../inputs/data/FISH_IDENTIFIER_MIX_MULTI_SINGLE_POINT.xlsx"))
+
+CORRECTED_SAMPLES = RAW_SAMPLES_WITH_ENVIRONMENT[(fish_identifier %in% FISH_IDENTIFIER_MIX_MULTI_SINGLE_POINT$fish_identifier & substr(geometry, start = 1, stop = 5) != "POINT")]
+
+RAW_SAMPLES_WITH_ENVIRONMENT = RAW_SAMPLES_WITH_ENVIRONMENT[!(fish_identifier %in% FISH_IDENTIFIER_MIX_MULTI_SINGLE_POINT$fish_identifier)]
+
+RAW_SAMPLES_WITH_ENVIRONMENT = rbindlist(list(RAW_SAMPLES_WITH_ENVIRONMENT, CORRECTED_SAMPLES))
+
 # Format sampling date
 RAW_SAMPLES_WITH_ENVIRONMENT[, fish_sampling_date := as.POSIXct(fish_sampling_date)] 
 
@@ -80,35 +97,40 @@ RAW_SAMPLES_WITH_ENVIRONMENT_MULTIPLE = RAW_SAMPLES_WITH_ENVIRONMENT[!fish_ident
 
 ## Multiple geometry of type POINT
 
-FISH_IDENTIFIERS_MULTIPLE_MULTIPOINT = RAW_SAMPLES_WITH_ENVIRONMENT_MULTIPLE[grep("MULTI", RAW_SAMPLES_WITH_ENVIRONMENT_MULTIPLE$geometry), fish_identifier]
+#FISH_IDENTIFIERS_MULTIPLE_MULTIPOINT = RAW_SAMPLES_WITH_ENVIRONMENT_MULTIPLE[grep("MULTI", RAW_SAMPLES_WITH_ENVIRONMENT_MULTIPLE$geometry), fish_identifier]
 
-RAW_SAMPLES_WITH_ENVIRONMENT_MULTIPLE_POINTS = RAW_SAMPLES_WITH_ENVIRONMENT_MULTIPLE[!fish_identifier %in% FISH_IDENTIFIERS_MULTIPLE_MULTIPOINT]
+RAW_SAMPLES_WITH_ENVIRONMENT_MULTIPLE_POINTS = RAW_SAMPLES_WITH_ENVIRONMENT_MULTIPLE[substr(geometry, 1, 5) == "POINT"]
 
-RAW_SAMPLES_WITH_ENVIRONMENT_MULTIPLE_POINTS[, LONG_CENTROID := get_centroid(geometry)[1], by = .(fish_identifier)]
+RAW_SAMPLES_WITH_ENVIRONMENT_MULTIPLE_POINTS[, LONG_CENTROID := get_centroid(geometry)[1], by = .(fish_identifier, geometry)]
 
-RAW_SAMPLES_WITH_ENVIRONMENT_MULTIPLE_POINTS[, LAT_CENTROID := get_centroid(geometry)[2], by = .(fish_identifier)]
+RAW_SAMPLES_WITH_ENVIRONMENT_MULTIPLE_POINTS[, LAT_CENTROID := get_centroid(geometry)[2], by = .(fish_identifier, geometry)]
 
 ## Multiple geometry of mixed type (POINT and MULTIPOINT)
 
-RAW_SAMPLES_WITH_ENVIRONMENT_MULTIPLE_MIX = RAW_SAMPLES_WITH_ENVIRONMENT_MULTIPLE[fish_identifier %in% FISH_IDENTIFIERS_MULTIPLE_MULTIPOINT]
+#RAW_SAMPLES_WITH_ENVIRONMENT_MULTIPLE_MIX = RAW_SAMPLES_WITH_ENVIRONMENT_MULTIPLE[fish_identifier %in% FISH_IDENTIFIERS_MULTIPLE_MULTIPOINT]
+
+#FISH_IDENTIFIER_TWO_OCEANS = RAW_SAMPLES_WITH_ENVIRONMENT_MULTIPLE_MIX[, .(n = length(unique(ocean))), keyby = .(fish_identifier)][n == 2, .(fish_identifier)]
+
+#write.xlsx(FISH_IDENTIFIER_TWO_OCEANS, file = "../inputs/data/FISH_IDENTIFIER_TWO_OCEANS.xlsx")
+
+#FISH_IDENTIFIER_MIX_MULTI_SINGLE_POINT = unique(RAW_SAMPLES_WITH_ENVIRONMENT_MULTIPLE_MIX[!fish_identifier %in% FISH_IDENTIFIER_TWO_OCEANS$fish_identifier][, .(fish_identifier)])
+
+#write.xlsx(FISH_IDENTIFIER_MIX_MULTI_SINGLE_POINT, file = "../inputs/data/FISH_IDENTIFIER_MIX_MULTI_SINGLE_POINT.xlsx")
+
+
+# COMBINE THE THREE DATA SETS IN A SINGLE ONE ####
+
+SAMPLES_WITH_ENVIRONMENT = rbindlist(list(RAW_SAMPLES_WITH_ENVIRONMENT_SINGLE_MULTIPOINT, RAW_SAMPLES_WITH_ENVIRONMENT_SINGLE_POINT, RAW_SAMPLES_WITH_ENVIRONMENT_MULTIPLE_POINTS)) 
 
 # Consolidate fishing dates
 
 # Remove fishing_date_min and fishing_date_max if equal to fishing_date
-RAW_SAMPLES_WITH_ENVIRONMENT[fishing_date == fishing_date_min & fishing_date == fishing_date_max, `:=` (fishing_date_min = NA, fishing_date_max = NA)]
-
-# TEMP
-# popo = RAW_SAMPLES_WITH_ENVIRONMENT[!is.na(fishing_date) & !is.na(fishing_date_min) & ocean_code == "IO"]
-# popo[, `:=` (fish_sampling_date = as.Date(fish_sampling_date), landing_date = as.Date(landing_date), fishing_date = as.Date(fishing_date), fishing_date_min = as.Date(fishing_date_min), fishing_date_max = as.Date(fishing_date_max))]
-# write.xlsx(popo, file = "./outputs/TUNA_FISHING_DATES_QUESTION_TF.xlsx")
+SAMPLES_WITH_ENVIRONMENT[fishing_date == fishing_date_min & fishing_date == fishing_date_max, `:=` (fishing_date_min = NA, fishing_date_max = NA)]
 
 # Remove fishing_date_min and fishing_date_max if fishing_date not null
-RAW_SAMPLES_WITH_ENVIRONMENT[!is.na(fishing_date), `:=` (fishing_date_min = NA, fishing_date_max = NA)]
+SAMPLES_WITH_ENVIRONMENT[!is.na(fishing_date), `:=` (fishing_date_min = NA, fishing_date_max = NA)]
 
-
-
-
-
+#=========== 
 
 # Compute "average" date when only min and max are available
 RAW_SAMPLES_WITH_ENVIRONMENT[is.na(fishing_date), fishing_date_avg := as.Date(fishing_date_min + difftime(fishing_date_max, fishing_date_min, units = "days")/2, format = "%Y-%m-%d")]
