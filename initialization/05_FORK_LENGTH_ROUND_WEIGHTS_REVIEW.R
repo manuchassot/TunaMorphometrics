@@ -77,7 +77,7 @@ OTHER_PARAMS = data.table(read.xlsx("../inputs/data/TRFMO_PARAMETERS.xlsx", shee
 FL_RW_PARAMS = rbindlist(list(FISHBASE_PARAMS, TRFMO_PARAMS, OTHER_PARAMS), use.names = TRUE)
 
 # Factorize and order the species
-FL_RW_PARAMS[, Species := factor(Species, levels = c("Bigeye tuna", "Skipjack tuna", "Yellowfin tuna"))]
+FL_RW_PARAMS[, Species := factor(Species, levels = c("Bigeye tuna", "Yellowfin tuna", "Skipjack tuna"))]
 
 # Statistics
 FL_RW_PARAMS[, as.list(summary(a*1e5)), keyby = .(Species, SpeciesCode)]
@@ -86,6 +86,8 @@ FL_RW_PARAMS[, as.list(summary(b)), keyby = .(Species, SpeciesCode)]
 FL_RW_PARAMS_ab_BIPLOT =
 ggplot(FL_RW_PARAMS, aes(x = a*1e5, y = b, color = Species, shape = Species)) +
   geom_point(size = 2.5) +
+  scale_color_manual(values = SPECIES_COL_SHAPE$FILL, guide = guide_legend(reverse = TRUE)) +
+  scale_shape_manual(values = SPECIES_COL_SHAPE$SHAPE, guide = guide_legend(reverse = TRUE)) +
   theme_bw() +
   labs(x = expression(paste("a x 1", e^{-5})), y = "b") +
   theme(legend.position = "bottom", legend.title = element_blank())
@@ -96,6 +98,7 @@ ggsave(filename = "../outputs/charts/PRIORS/FL_RW_PARAMS_ab_BIPLOT.png", plot = 
 
 FL_RW_PARAMS_a_PLOT =
 ggplot(FL_RW_PARAMS, aes(x = a*1e5, y = Species, fill = Species)) +
+  scale_fill_manual(values = SPECIES_COL_SHAPE$FILL) +
   geom_boxplot() +
   theme_bw() +
   labs(x = expression(paste("a x 1", e^{-5})), y = "") +
@@ -103,6 +106,7 @@ ggplot(FL_RW_PARAMS, aes(x = a*1e5, y = Species, fill = Species)) +
 
 FL_RW_PARAMS_b_PLOT =
 ggplot(FL_RW_PARAMS, aes(x = b, y = Species, fill = Species)) +
+  scale_fill_manual(values = SPECIES_COL_SHAPE$FILL) +
   geom_boxplot() +
   theme_bw() +
   labs(x = "b", y = "") +
@@ -114,6 +118,9 @@ FL_RW_PARAMS_ab_PLOT[[2]] = FL_RW_PARAMS_ab_PLOT[[2]] + theme(axis.text.y = elem
                                         axis.ticks.y = element_blank(),
                                         axis.title.y = element_blank() )
 
+FL_RW_PARAMS_ab_PLOTS = FL_RW_PARAMS_ab_BIPLOT / FL_RW_PARAMS_ab_PLOT
+
 ggsave(filename = "../outputs/charts/PRIORS/FL_RW_PARAMS_ab_MARGINAL_PLOTS.png", plot = FL_RW_PARAMS_ab_PLOT, width = 8, height = 4.5)
+ggsave(filename = "../outputs/charts/PRIORS/FL_RW_PARAMS_ab_PLOTS.png", plot = FL_RW_PARAMS_ab_PLOTS, width = 8, height = 9)
 
 print("Length-weight parameters for tropical tuna reviewed!")

@@ -29,6 +29,8 @@ p_load(
   "mcmcplots",
   "coda",
   "boa",
-  "wellknown"
+  "wellknown",
+  "rnaturalearth",
+  "MASS"
   )
 

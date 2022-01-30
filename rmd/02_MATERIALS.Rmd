@@ -1,21 +1,23 @@
 
-# Materials
+# Materials & Methods
 
-## Sampling operations
+## Data collection
+
+### Sampling operations
 
 Most sampling operations were conducted at tuna processing factories located in Abidjan (Côte d'Ivoire) and Victoria (Seychelles) through agreements with the companies to comply with health and quality manufacturer practices and not delay processing operations [@Marsac2006; @Chassot2014]. Access to the canneries and processing lines varied over time according to management policy and staff availability, which resulted in unbalanced sampling design (**Table 1**). In complement, some tunas were sampled during tagging and recovery operations conducted throughout the Indian Ocean Regional Tuna Tagging Programme (IO-RTTP) and during some research projects conducted on the ecology of tropical tuna in the region [@Murua2015; @Bodin2018].
 
-## Tuna traceability
+### Tuna traceability
 
 Traceability relies on the ability of accurately and precisely determining the origin of the fish sampled, i.e., the geographic location where and date when the fish was caught. Hence, it depends on the information recorded and available at each stage of the production process, from fishing to processing. In the case of measurements performed at sea (e.g., fisheries observers), traceability is easy to establish. In the case of sampling at processing factories, traceability may be more difficult to achieve as it can be affected by (i) fish handling and storing procedures onboard the vessels (e.g., sorting by species prior to loading into freezing wells), (ii) mix of fish from different wells during unloading (e.g., several wells concurrently unloaded on the same conveyor belt), and (iii) mix of fish from different origins in the cannery.
 
 Information on the origin of the fish being processed in the canneries relied on three main data sources: (i) vessel identifier and date of purchase by the cannery to determine fishing trip, (ii) well plans of chief engineers which record the origin of the catch (i.e., fishing set) stored in each freezing well, and (iii) skipper logbooks which record the date and position of each fishing set. Based on these data sources, we tracked the origin of each fish sampled in the canneries and reconstructed the potential fishing sets from which the fish came from. Overall, the minimum level of traceability achieved by the canneries was found to be the fishing trip [@Chassot2017]. In the cases when the well unloaded was known, we were able to track the origin of the fish to the fishing set. We did not sample any fish unloaded from cargos and containers as the fishing information was more difficult to collect in such cases and fish from different trips may mix together.
 
-## Sampling protocol
+### Sampling protocol
 
-For each fish, the species was identified based on meristic and morphometric traits and the sex determined from visual examination of the gonads [@Collette1983]. All fish from processing factories were defrosted prior to sampling for length and weight (**Table X**). Length measurements were taken with a calliper in most cases and recorded to the nearest 0.1 cm while total weights were measured with a 150 kg scale to the nearest 0.1 kg. Tuna collected during the IO-RTTP were sampled fresh at sea and measured with a measuring board while their total weight was measured with spring scales.
+For each fish, the species was identified based on meristic and morphometric traits and the sex determined from visual examination of the gonads [@Collette1983]. All fish from processing factories were defrosted prior to sampling for length and weight (**Table X**). Length measurements were taken with a calliper in most cases (XX% of the data set) and recorded to the nearest 0.1 cm while total weights were measured with a scale to the nearest 0.1 kg. Tuna collected during the IO-RTTP were sampled fresh at sea and measured with a measuring board while their total weight was measured with spring scales.
 
-## Data quality control
+### Data quality control
 
 Data stored in the database were systematically checked for integrity. Consistency, validation and formatting controls were carried out when entering the data. Errors can be made at the time of transcription and data entry. Data were therefore controlled with charts, comparison of values, or by checking the timeline for the dates. A correction was made on the basis of the physical data entry sheets on which the data are recorded during sampling.
 

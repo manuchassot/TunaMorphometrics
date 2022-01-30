@@ -1,11 +1,12 @@
 ---
 title: "Morphometrics and allometry in tropical tuna from the tropical Atlantic and Indian Oceans"
 date: "`r format(Sys.time(), '%d %B %Y')`"
-author: Chassot Emmanuel^1,2^, Nathalie Bodin^1,2,3^, Constance Diaha^4^, Cindy Assan^4^, Pedro Pascual-Alayón^5^, José-Carlos Báez^6,7^, Aurélie Guillou^1^, Antoine Duparc^1^, Francis Marsac^1^, Julien Barde^1^, and Julien Lebranchu^1,\(^\dagger\)^
+author: Chassot Emmanuel^1,2^, Nathalie Bodin^1,2,3^, Constance Diaha^4^, Cindy Assan^4^, Pedro Pascual-Alayón^5^, José-Carlos Báez^6,7^, Ob7^1^, Francis Marsac^1^, Julien Barde^1^, and Julien Lebranchu^1,\(^\dagger\)^
 output:
   word_document2:
     reference_docx: "../templates/doc_template.docx"
     number_sections: FALSE
+    fig_caption: yes 
 csl: cjfas.csl
 bibliography: TunaMorpho.bib
 link-citations: yes
@@ -67,7 +68,7 @@ knit_hooks$set(
 
 \pagebreak
 
-```{r child = "08_FIGURES.Rmd", eval = FALSE}
+```{r child = "08_FIGURES.Rmd"}
 ```
 
 \pagebreak

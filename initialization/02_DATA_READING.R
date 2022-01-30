@@ -48,6 +48,8 @@ AO_RAW_SAMPLES_WITH_ENVIRONMENT2 = AO_RAW_SAMPLES_WITH_ENVIRONMENT1[!AO_INDIC_NO
 
 # Other data sets ####
 
+IO_IOT_NO_GEOMETRY = IO_RAW_SAMPLES_WITH_ENVIRONMENT[IO_INDIC_NO_OCEAN_INFORMATION, .(project, sampling_year = year(fish_sampling_date), species_code_fao,  sex, fork_length, whole_fish_weight, ocean_code)]
+
 IO_EMOTION   = fread("../inputs/data/data_emotion_fl_wt_2009_2014.csv")[c_sp_fao %in% c("BET", "SKJ", "YFT")]
 IO_EMOTION[, ocean_code := "IO"]
 names(IO_EMOTION) = c("project", "sampling_year", "species_code_fao", "sex", "fork_length", "whole_fish_weight", "ocean_code")

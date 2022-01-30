@@ -1,11 +1,9 @@
 
-# SPECIES COLORS
-SPECIES_COL    = data.table(species_code_fao = c("BET", "SKJ", "YFT"), FILL = pal_jco(alpha = 0.6)(3), OUTLINE = darken(pal_jco(alpha = 0.6)(3), 0.2))
-#SPECIES_COL    = data.table(species_code_fao = c("BET", "SKJ", "YFT"), FILL = pal_startrek(alpha = 0.6)(3), OUTLINE = darken(pal_startrek(alpha = 0.6)(3), 0.2))
+# SPECIES COLORS AND SHAPES
+SPECIES_COL_SHAPE    = data.table(species_code_fao = c("BET", "YFT", "SKJ"), species = c("Bigeye tuna", "Yellowfin tuna", "Skipjack tuna"), FILL = pal_jco(alpha = 0.6)(3), OUTLINE = darken(pal_jco(alpha = 0.6)(3), 0.2), SHAPE = c(1, 2, 0)) # c(19, 17, 15))
 
 
-
-# COLOR TESTS
+# # COLOR TESTS
 # n     = 10000
 # xobs  = seq(20, 120, length.out = n)
 # 
@@ -23,6 +21,5 @@ SPECIES_COL    = data.table(species_code_fao = c("BET", "SKJ", "YFT"), FILL = pa
 # plot(OBS$FL, OBS$TW, xlab = "Fork length (cm)", ylab = "Total weight (kg)", pch = 19, cex = .8, las = 1, col = SPECIES_COL[species_code_fao == "BET", FILL])
 # 
 # ggplot(data = OBS, aes(x = FL, y = TW)) +
-#   geom_point(color = SPECIES_COL[species_code_fao == "BET", FILL]) +
+#   geom_point(color = SPECIES_COL[species_code_fao == "YFT", FILL]) +
 #   theme_bw()
-#   
