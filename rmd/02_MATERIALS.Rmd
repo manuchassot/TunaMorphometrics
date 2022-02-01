@@ -15,9 +15,15 @@ Information on the origin of the fish being processed in the canneries relied on
 
 ### Sampling protocol
 
-For each fish, the species was identified based on meristic and morphometric traits and the sex determined from visual examination of the gonads [@Collette1983]. All fish from processing factories were defrosted prior to sampling for length and weight (**Table X**). Length measurements were taken with a calliper in most cases (XX% of the data set) and recorded to the nearest 0.1 cm while total weights were measured with a scale to the nearest 0.1 kg. Tuna collected during the IO-RTTP were sampled fresh at sea and measured with a measuring board while their total weight was measured with spring scales.
+For each fish, the species was identified based on meristic and morphometric traits [@Collette1983] and the sex determined from visual examination of the gonads [@Zudaire2015]. All fish from processing factories were defrosted prior to sampling for length (_L~D~_ and _L~F~) and weight (_W~R~_). Length measurements were taken with a calliper in most cases (XX% of the data set) and recorded to the nearest 0.1 cm while round weights were measured with a scale to the nearest 0.1 kg. Tuna collected during the IO-RTTP were sampled fresh at sea and measured with a measuring board while their total weight was measured with spring scales.
+
+### Sampling design
+
+**Table \@ref(Tab::SamplingDesignTable)**
 
 ### Data quality control
 
 Data stored in the database were systematically checked for integrity. Consistency, validation and formatting controls were carried out when entering the data. Errors can be made at the time of transcription and data entry. Data were therefore controlled with charts, comparison of values, or by checking the timeline for the dates. A correction was made on the basis of the physical data entry sheets on which the data are recorded during sampling.
+
+
 

@@ -63,7 +63,7 @@ knit_hooks$set(
 
 \pagebreak
 
-```{r child = "07_TABLES.Rmd", eval = FALSE}
+```{r child = "07_TABLES.Rmd"}
 ```
 
 \pagebreak

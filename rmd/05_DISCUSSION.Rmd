@@ -1,2 +1,8 @@
 
 # Discussion
+
+
+<!-- For BET and YFT, the IOTC length-weight relationships vary according to fishing gear [@IOTC2021]. -->
+
+<!-- In both oceans, many other morphometric relationships may be available at national levels and used in the curation of fisheries data although  -->
+
