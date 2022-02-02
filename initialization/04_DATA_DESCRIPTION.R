@@ -58,7 +58,21 @@ BaseMap +
   theme(legend.position = "bottom", legend.title = element_blank()) +
   labs(x = "Longitude", y = "Latitude")
 
-ggsave("../outputs/charts/SAMPLES_MAP.png", SAMPLES_MAP, width = 12, height = 4.5/8*12)
+ggsave("../outputs/charts/SAMPLES/SAMPLES_MAP.png", SAMPLES_MAP, width = 12, height = 4.5/8*12)
+
+# FISH ORIGIN UNCERTAINTY ####
+
+SAMPLES_CAPTURE_DATE_UNCERTAINTY = 
+ggplot(data = SAMPLES_WITH_ENVIRONMENT, aes(x = fishing_date_range, fill = ocean, colour = ocean)) +
+  geom_histogram(bins = 30) +
+  theme_bw() +
+  scale_color_manual(values = OCEAN_COL_SHAPE$OUTLINE) +
+  scale_fill_manual(values = OCEAN_COL_SHAPE$FILL) +
+  labs(x = "Range of uncertainty (days)", y = "Frequency") +
+  scale_y_continuous(labels=function(x) format(x, big.mark = ",", scientific = FALSE)) +
+  theme(legend.position = "bottom", legend.title = element_blank())
+
+ggsave("../outputs/charts/SAMPLES/SAMPLES_CAPTURE_DATE_UNCERTAINTY.png")
 
 # SAMPLING DESIGN TABLE ####
 

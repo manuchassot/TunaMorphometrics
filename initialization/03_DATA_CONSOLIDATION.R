@@ -67,6 +67,9 @@ RAW_SAMPLES_WITH_ENVIRONMENT[species_code_fao == "YFT", `:=` (species_english_na
 RAW_SAMPLES_WITH_ENVIRONMENT[ocean_code == "AO", ocean := "Atlantic Ocean"]
 RAW_SAMPLES_WITH_ENVIRONMENT[ocean_code == "IO", ocean := "Indian Ocean"]
 
+RAW_SAMPLES_WITH_ENVIRONMENT[, ocean_code := as.factor(ocean_code)]
+RAW_SAMPLES_WITH_ENVIRONMENT[, ocean := as.factor(ocean)]
+
 # Consolidate fishing dates
 
 # Remove fishing_date_min and fishing_date_max if equal to fishing_date

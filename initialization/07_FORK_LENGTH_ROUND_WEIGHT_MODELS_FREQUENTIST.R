@@ -10,7 +10,7 @@ FORK_LENGTH_ROUND_WEIGHT_DATASET = Dataset[ocean_code == OceanCode & species_cod
 SpeciesEnglish    = unique(FORK_LENGTH_ROUND_WEIGHT_DATASET$species_english_name)
 SpeciesScientific = unique(FORK_LENGTH_ROUND_WEIGHT_DATASET$species_scientific_name)
 Ocean             = unique(FORK_LENGTH_ROUND_WEIGHT_DATASET$ocean)
-Color             = as.factor(SPECIES_COL[species_code_fao == SpeciesCode, FILL])  
+Color             = as.factor(SPECIES_COL_SHAPE[species_code_fao == SpeciesCode, FILL])  
 
 # Model
 LM_FORK_LENGTH_ROUND_WEIGHT = lm(log10(whole_fish_weight) ~ log10(fork_length), data = FORK_LENGTH_ROUND_WEIGHT_DATASET)

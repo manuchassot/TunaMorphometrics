@@ -37,6 +37,11 @@ knit_hooks$set(
     prettyNum(x, big.mark = "")
   }
 )
+
+#prettyNum with default ',' as big mark
+pn = function(number, big.mark = ",") {
+  return(prettyNum(number, big.mark = big.mark))
+}
 ```
 
 ```{r child = "00_FRONT.Rmd"}

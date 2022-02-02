@@ -2,6 +2,9 @@
 # SPECIES COLORS AND SHAPES
 SPECIES_COL_SHAPE    = data.table(species_code_fao = c("BET", "YFT", "SKJ"), species = c("Bigeye tuna", "Yellowfin tuna", "Skipjack tuna"), FILL = pal_jco(alpha = 0.6)(3), OUTLINE = darken(pal_jco(alpha = 0.6)(3), 0.2), SHAPE = c(1, 2, 0)) # c(19, 17, 15))
 
+# OCEAN COLORS AND SHAPES
+OCEAN_COL_SHAPE    = data.table(ocean_code = c("AO", "IO"), ocean = c("Atlantic ocean", "Indian Ocean"), FILL = pal_simpsons(alpha = 0.6)(2), OUTLINE = darken(pal_simpsons(alpha = 0.6)(2), 0.2), SHAPE = c(19, 17))
+
 
 # # COLOR TESTS
 # n     = 10000

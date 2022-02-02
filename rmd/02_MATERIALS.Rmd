@@ -5,13 +5,15 @@
 
 ### Sampling operations
 
-Most sampling operations were conducted at tuna processing factories located in Abidjan (Côte d'Ivoire) and Victoria (Seychelles) through agreements with the companies to comply with health and quality manufacturer practices and not delay processing operations [@Marsac2006; @Chassot2014]. Access to the canneries and processing lines varied over time according to management policy and staff availability, which resulted in unbalanced sampling design (**Table 1**). In complement, some tunas were sampled during tagging and recovery operations conducted throughout the Indian Ocean Regional Tuna Tagging Programme (IO-RTTP) and during some research projects conducted on the ecology of tropical tuna in the region [@Murua2015; @Bodin2018].
+Most sampling operations were conducted at tuna processing factories located in Abidjan (Côte d'Ivoire) and Victoria (Seychelles) through agreements with the companies to comply with health and quality manufacturer practices and not delay processing operations [@Marsac2006; @Chassot2014]. Access to the canneries and processing lines varied over time according to management policy and staff availability, which resulted in unbalanced sampling design (see below). In complement, some tunas were sampled during tagging and recovery operations conducted throughout the Indian Ocean Regional Tuna Tagging Programme (IO-RTTP) and during some research projects conducted on the ecology of tropical tuna in the region [@Murua2015; @Bodin2018].
 
 ### Tuna traceability
 
 Traceability relies on the ability of accurately and precisely determining the origin of the fish sampled, i.e., the geographic location where and date when the fish was caught. Hence, it depends on the information recorded and available at each stage of the production process, from fishing to processing. In the case of measurements performed at sea (e.g., fisheries observers), traceability is easy to establish. In the case of sampling at processing factories, traceability may be more difficult to achieve as it can be affected by (i) fish handling and storing procedures onboard the vessels (e.g., sorting by species prior to loading into freezing wells), (ii) mix of fish from different wells during unloading (e.g., several wells concurrently unloaded on the same conveyor belt), and (iii) mix of fish from different origins in the cannery.
 
-Information on the origin of the fish being processed in the canneries relied on three main data sources: (i) vessel identifier and date of purchase by the cannery to determine fishing trip, (ii) well plans of chief engineers which record the origin of the catch (i.e., fishing set) stored in each freezing well, and (iii) skipper logbooks which record the date and position of each fishing set. Based on these data sources, we tracked the origin of each fish sampled in the canneries and reconstructed the potential fishing sets from which the fish came from. Overall, the minimum level of traceability achieved by the canneries was found to be the fishing trip [@Chassot2017]. In the cases when the well unloaded was known, we were able to track the origin of the fish to the fishing set. We did not sample any fish unloaded from cargos and containers as the fishing information was more difficult to collect in such cases and fish from different trips may mix together.
+Information on the origin of the fish being processed in the canneries relied on three main data sources: (i) vessel identifier and date of purchase by the cannery to determine fishing trip, (ii) well plans of chief engineers which record the origin of the catch (i.e., fishing set) stored in each freezing well, and (iii) skipper logbooks which record the date and position of each fishing set. Overall, the minimum level of traceability achieved by the canneries was found to be the fishing trip. Based on the data sources available, we tracked the origin of the fish sampled in the canneries and were able to reconstruct the potential fishing sets of origin for most samples [@Chassot2017].
+
+A total of `r pn(AO_NUMBER_FISH_NO_OCEAN_INFORMATION + IO_NUMBER_FISH_NO_OCEAN_INFORMATION)` samples were removed from the analysis as no information on the origin of the fish was available, including the ocean of capture. Although fisher logbooks were not available for `r pn(AO_NUMBER_FISH_NO_GEOMETRY + IO_NUMBER_FISH_NO_GEOMETRY)` fish, the ocean of capture could be determined from the name and fishing grounds of the fishing vessels. For all remaining samples (n = `r pn(SAMPLES_WITH_ENVIRONMENT[, .N])`), the potential dates and geographic positions of capture were derived from the information made available by the canning and fishing companies. Each fish was then assigned a centroid (i.e., barycenter) and a range of uncertainty in the date of capture in order to assess the level of knowledge on their origin. 
 
 ### Sampling protocol
 
@@ -19,7 +21,9 @@ For each fish, the species was identified based on meristic and morphometric tra
 
 ### Sampling design
 
-**Table \@ref(Tab::SamplingDesignTable)**
+
+
+**Table \@ref(tab:SamplingDesignTable)**
 
 ### Data quality control
 
