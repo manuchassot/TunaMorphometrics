@@ -12,6 +12,7 @@ BaseMap =
         
 # Longhurst provinces
 # https://rstudio-pubs-static.s3.amazonaws.com/485396_7d5f60e87225469fb0c0c04684a0cf31.html
+
 LONGHURST = LONGHURST_RAW %>% 
   sf::st_simplify(dTolerance = 0.01) %>% 
   dplyr::group_by(ProvCode, ProvDescr) %>% 
