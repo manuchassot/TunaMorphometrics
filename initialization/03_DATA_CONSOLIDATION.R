@@ -10,7 +10,7 @@ SAMPLES_WITH_ENVIRONMENT[ocean_code == "AO", ocean := "Atlantic Ocean"]
 
 # Add species English and scientific names
 SAMPLES_WITH_ENVIRONMENT[species_code_fao == "BET", `:=` (species_english_name = "Bigeye tuna", scientific_name = "Thunnus obesus")]
-SAMPLES_WITH_ENVIRONMENT[species_code_fao == "SKJ", `:=` (species_english_name = "SKipjack tuna", scientific_name = "Katsuwonus pelamis")]
+SAMPLES_WITH_ENVIRONMENT[species_code_fao == "SKJ", `:=` (species_english_name = "Skipjack tuna", scientific_name = "Katsuwonus pelamis")]
 SAMPLES_WITH_ENVIRONMENT[species_code_fao == "YFT", `:=` (species_english_name = "Yellowfin tuna", scientific_name = "Thunnus albacares")]
 
 # Add sampling year

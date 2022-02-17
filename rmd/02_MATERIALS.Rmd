@@ -5,29 +5,33 @@
 
 ### Sampling operations
 
-Most sampling operations were conducted at tuna processing factories located in Abidjan (Côte d'Ivoire) and Victoria (Seychelles) through agreements with the companies to comply with health and quality manufacturer practices and not delay processing operations [@Marsac2006; @Chassot2014]. Access to the canneries and processing lines varied over time according to management policy and staff availability, which resulted in unbalanced sampling design (see below). In complement, some tunas were sampled during some research projects conducted on the ecology of tropical tuna in the Indian Ocean region [@Bodin2018].
-
-### Tuna traceability
-
-Traceability relies on the ability of accurately and precisely determining the origin of the fish sampled, i.e., the geographic location where and date when the fish was caught. Hence, it depends on the information recorded and available at each stage of the production process, from fishing to processing. In the case of measurements performed at sea (e.g., fisheries observers), traceability is easy to establish. In the case of sampling at processing factories, traceability may be more difficult to achieve as it can be affected by (i) fish handling and storing procedures onboard the vessels (e.g., sorting by species prior to loading into freezing wells), (ii) mix of fish from different wells during unloading (e.g., several wells concurrently unloaded on the same conveyor belt), and (iii) mix of fish from different origins in the cannery.
-
-Information on the origin of the fish being processed in the canneries relied on three main data sources: (i) vessel identifier and date of purchase by the cannery to determine fishing trip, (ii) well plans of chief engineers which record the origin of the catch (i.e., fishing set) stored in each freezing well, and (iii) skipper logbooks which record the date and position of each fishing set. Overall, the minimum level of traceability achieved by the canneries was found to be the fishing trip. Based on the data sources available, we tracked the origin of the fish sampled in the canneries and were able to reconstruct the potential fishing sets of origin for most samples [@Chassot2017].
-
-The potential dates and geographic positions of capture were determined for about half of the full data set from the information made available by the canning and fishing companies (n = `r pn(TUNA_SAMPLES[!is.na(ProvCode), .N])` fish). Each fish was then assigned a centroid (i.e., barycenter) and a range of uncertainty in the date of capture in order to assess the level of knowledge on their origin. For the `r pn(TUNA_SAMPLES[is.na(ProvCode), .N])` remaining samples, traceability was not possible except for the ocean of capture.
+Most sampling operations were conducted at tuna processing factories located in Abidjan (Côte d'Ivoire) and Victoria (Seychelles) through agreements with the companies to comply with health and quality manufacturer practices and not delay processing operations [@Marsac2006; @Chassot2014]. Access to the canneries and processing lines varied over time according to management policy and staff availability, which resulted in unbalanced sampling design (see below). In complement, some tunas were sampled in the research labs of the Centre de Recherches Océanologiques (CRO) of Abidjan and the Seychelles Fishing Authority (SFA) during some research projects conducted on the ecology of tropical tuna in the eastern Atlantic Ocean and western Indian Ocean, respectively [e.g., @Bodin2018;@Sardenne2019;@Pecoraro2020].
 
 ### Sampling protocol
 
-For each fish, the species was identified based on meristic and morphometric traits [@Collette1983] and the sex determined from visual examination of the gonads [@Zudaire2015]. All fish from processing factories were defrosted prior to sampling for length (_L~D~_ and _L~F~) and weight (_W~R~_). Length measurements were taken with a calliper in most cases or a measuring board and recorded to the nearest 0.1 cm while round weights were measured with a scale to the nearest 0.1 kg.
+For each fish, the species was identified based on meristic and morphometric traits [@Collette1983] and the sex determined from visual examination of the gonads [@Zudaire2015]. All fish from processing factories were defrosted prior to sampling for length (_L~D~_ and _L~F~_) and weight (_W~R~_). Length measurements were taken with a calliper in most cases or a measuring board and recorded to the nearest 0.1 cm while round weights were measured with a scale to the nearest 0.1 kg.
 
 ### Sampling design
 
+Our data set is comprised of a total of `r pn(TUNA_SAMPLES[, .N])` tropical tunas sampled between `r min(TUNA_SAMPLES$sampling_year, na.rm = TRUE)` and `r max(TUNA_SAMPLES$sampling_year, na.rm = TRUE)`. The sampling design is unbalanced with more tunas sampled in the Indian Ocean (n = `r pn(N_IO)`) than in the Atlantic Ocean (n = `r pn(N_AO)`) (**Table \@ref(tab:SamplingDesignTable)**). Also, 
+yellowfin tuna overall contribute to `r PERCENT_YFT`% of the total data set when skipjack and bigeye tunas represent `r PERCENT_SKJ`% and `r PERCENT_SKJ`%, respectively. For each species and ocean, the data well cover the range of sizes exploited in the purse seine fishery, from recruitment at about 30 cm _L~F~_ to sizes close to the maximum sizes observed for tropical tunas across all fisheries (ICCAT 2021, IOTC 2021).
+
+### Traceability
+
+Traceability relies on the ability of accurately and precisely determining the origin of the fish sampled, i.e., the geographic location where and date when the fish was caught. Hence, it depends on the information recorded and available at each stage of the production process, from fishing to processing. In the case of measurements performed at sea (e.g., fisheries observers), traceability is easy to establish. In the case of sampling at processing factories, traceability may be more difficult to achieve as it can be affected by (i) fish handling and storing procedures onboard the vessels (e.g., sorting by species prior to loading into freezing wells), (ii) mix of fish from different wells during unloading (e.g., several wells concurrently unloaded on the same conveyor belt), and (iii) mix of fish from different origins in the cannery.
+
+Information on the origin of the fish being processed in the canneries relied on three main data sources: (i) vessel identifier and date of purchase by the cannery to determine fishing trip, (ii) well plans of chief engineers which record the origin of the catch (i.e., fishing set) stored in each freezing well, and (iii) skipper logbooks which record the date and position of each fishing set [@Chassot2017]. Based on the information made available by the canning and fishing companies, we were able to determine the potential dates and geographic positions of capture for more than half of the data set, i.e., for `r pn(TUNA_SAMPLES[!is.na(ProvCode), .N])` fish. Each fish was then assigned a centroid (i.e., barycenter) and a range of uncertainty in the date of capture in order to assess the level of knowledge on their origin. Overall, the minimum level of traceability achieved was found to be of the order of magnitude of the fishing trip which last on average about one month.
+
+Fig. \@ref()).
+
+For the `r pn(TUNA_SAMPLES[is.na(ProvCode), .N])` remaining samples, traceability was not possible except for the ocean of capture.
 
 
-**Table \@ref(tab:SamplingDesignTable)**
 
-### Data quality control
 
-Data stored in the database were systematically checked for integrity. Consistency, validation and formatting controls were carried out when entering the data. Errors can be made at the time of transcription and data entry. Data were therefore controlled with charts, comparison of values, or by checking the timeline for the dates. A correction was made on the basis of the physical data entry sheets on which the data are recorded during sampling.
+<!-- ### Data quality control -->
+
+<!-- Data collected and stored in the database were systematically checked for integrity. Consistency, validation and formatting controls were carried out when entering the data. Errors can be made at the time of transcription and data entry. Data were controlled with charts, comparison of values, or by checking the timeline for the dates. A correction was made on the basis of the physical data entry sheets on which the data are recorded during sampling. -->
 
 
 

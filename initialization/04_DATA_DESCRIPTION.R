@@ -1,6 +1,20 @@
 
 # SAMPLING DESIGN ####
 
+N_TOT = TUNA_SAMPLES[, .N]
+N_IO  = TUNA_SAMPLES[ocean_code == "IO", .N]
+N_AO  = TUNA_SAMPLES[ocean_code == "AO", .N]
+
+N_BET = TUNA_SAMPLES[species_code_fao == "BET", .N]
+N_SKJ = TUNA_SAMPLES[species_code_fao == "SKJ", .N]
+N_YFT = TUNA_SAMPLES[species_code_fao == "YFT", .N] 
+
+PERCENT_BET = round(N_BET/N_TOT*100, 0)
+PERCENT_SKJ = round(N_SKJ/N_TOT*100, 0)
+PERCENT_YFT = round(N_YFT/N_TOT*100, 0)
+
+
+
 SAMPLING_DESIGN_TABLE = TUNA_SAMPLES[, .(N = length(unique(organism_identifier)), LD = paste(min(round(first_dorsal_length), na.rm = TRUE), max(round(first_dorsal_length), na.rm = TRUE), sep = "-"), LF = paste(min(round(fork_length), na.rm = TRUE), max(round(fork_length), na.rm = TRUE), sep = "-"), WR = paste(min(round(whole_weight_kg, 1), na.rm = TRUE), max(round(whole_weight_kg, 1), na.rm = TRUE), sep = "-")), keyby = .(Ocean = ocean, `Species code` = species_code_fao, `Species name` = species_english_name)]
 
 SAMPLING_DESIGN_TABLE_FT =

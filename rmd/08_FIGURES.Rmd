@@ -2,13 +2,13 @@
 # Figures
 
 ```{r SamplesMap, fig.cap = "Distribution of tuna sampled for morphometrics", fig.width = 12, fig.height = 6.75}
-include_graphics("../outputs/charts/SAMPLES/SAMPLES_MAP.png")
+include_graphics("../outputs/charts/DESCRIPTION/SAMPLES_MAP.png")
 ```
 
 \pagebreak
 
 ```{r Priors, fig.cap = "(Top) Relationship and (bottom) boxplots of the marginal distributions of the parameters _a_ and _b_ of the statistical power relationships between fork length (L~F~) and round weight (W~T~) for skipjack, yellowfin, and bigeye tunas as available from the literature", fig.width = 8, fig.height = 4.5}
-include_graphics("../outputs/charts/PRIORS/FL_RW_PARAMS_ab_PLOTS.png")
+include_graphics("../outputs/charts/REVIEW/FL_RW_PARAMS_ab_PLOTS.png")
 ```
 
 \pagebreak
