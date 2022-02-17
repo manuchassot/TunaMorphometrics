@@ -1,4 +1,22 @@
 
+# SAMPLING DESIGN ####
+
+SAMPLING_DESIGN_TABLE = TUNA_SAMPLES[, .(N = length(unique(organism_identifier)), LD = paste(min(round(first_dorsal_length), na.rm = TRUE), max(round(first_dorsal_length), na.rm = TRUE), sep = "-"), LF = paste(min(round(fork_length), na.rm = TRUE), max(round(fork_length), na.rm = TRUE), sep = "-"), WR = paste(min(round(whole_weight_kg, 1), na.rm = TRUE), max(round(whole_weight_kg, 1), na.rm = TRUE), sep = "-")), keyby = .(Ocean = ocean, `Species code` = species_code_fao, `Species name` = species_english_name)]
+
+SAMPLING_DESIGN_TABLE_FT =
+  SAMPLING_DESIGN_TABLE %>% 
+  flextable() %>%
+  merge_at(i = 1:3, j = "Ocean", part = "body") %>%
+  merge_at(i = 4:6, j = "Ocean", part = "body") %>%
+  hline(i = 3, border = fp_border(width = 1)) %>%
+  compose(part = "header", j = "LD", value = as_paragraph("L", as_sub("D"))) %>%
+  compose(part = "header", j = "LF", value = as_paragraph("L", as_sub("F"))) %>%
+  compose(part = "header", j = "WR", value = as_paragraph("W", as_sub("R"))) %>%
+  align(part = "header", j = 4:7, align = "center") %>%
+  align(part = "body", j = 4:7, align = "right") %>%
+  autofit() %>%
+  fix_border_issues()
+
 # SAMPLES MAP ####
 
 # World map
@@ -48,7 +66,7 @@ SAMPLES_MAP =
 BaseMap +
   geom_sf(data = LONGHURST, fill = NA) +
   geom_sf_text(data = LONGHURST_CENTROIDS_FOR_MAP, aes(label = ProvCode), show.legend = FALSE, check_overlap = TRUE) +
-  geom_sf(data = SAMPLES_WITH_ENVIRONMENT_SF, aes(shape = species_code_fao, colour = species_code_fao), alpha = 0.2) +
+  geom_sf(data = SAMPLES_WITH_ENVIRONMENT_LOCATION_SF, aes(shape = species_code_fao, colour = species_code_fao), alpha = 0.2) +
   guides(colour = guide_legend(override.aes = list(alpha = 1))) +
   scale_x_continuous(limits = c(-27, 80)) +
   scale_y_continuous(limits = c(-30, 27)) +
@@ -59,12 +77,12 @@ BaseMap +
   theme(legend.position = "bottom", legend.title = element_blank()) +
   labs(x = "Longitude", y = "Latitude")
 
-ggsave("../outputs/charts/SAMPLES/SAMPLES_MAP.png", SAMPLES_MAP, width = 12, height = 4.5/8*12)
+ggsave("../outputs/charts/DESCRIPTION/SAMPLES_MAP.png", SAMPLES_MAP, width = 12, height = 4.5/8*12)
 
 # FISH ORIGIN UNCERTAINTY ####
 
 SAMPLES_CAPTURE_DATE_UNCERTAINTY = 
-ggplot(data = SAMPLES_WITH_ENVIRONMENT, aes(x = fishing_date_range, fill = ocean, colour = ocean)) +
+ggplot(data = TUNA_SAMPLES, aes(x = capture_date_range, fill = ocean, colour = ocean)) +
   geom_histogram(bins = 30) +
   theme_bw() +
   scale_color_manual(values = OCEAN_COL_SHAPE$OUTLINE) +
@@ -73,33 +91,7 @@ ggplot(data = SAMPLES_WITH_ENVIRONMENT, aes(x = fishing_date_range, fill = ocean
   scale_y_continuous(labels=function(x) format(x, big.mark = ",", scientific = FALSE)) +
   theme(legend.position = "bottom", legend.title = element_blank())
 
-ggsave("../outputs/charts/SAMPLES/SAMPLES_CAPTURE_DATE_UNCERTAINTY.png")
-
-# SAMPLING DESIGN TABLE ####
-
-SAMPLING_DESIGN_TABLE = SAMPLES_WITH_ENVIRONMENT[, .(N = length(unique(fish_identifier)), LD = paste(min(round(first_dorsal_length), na.rm = TRUE), max(round(first_dorsal_length), na.rm = TRUE), sep = "-"), LF = paste(min(round(fork_length), na.rm = TRUE), max(round(fork_length), na.rm = TRUE), sep = "-"), WR = paste(min(round(whole_fish_weight, 1), na.rm = TRUE), max(round(whole_fish_weight, 1), na.rm = TRUE), sep = "-")), keyby = .(Ocean = ocean, `Species code` = species_code_fao, `Species name` = species_english_name)]
-
-SAMPLING_DESIGN_TABLE_FT =
-  SAMPLING_DESIGN_TABLE %>% 
-  flextable() %>%
-  merge_at(i = 1:3, j = "Ocean", part = "body") %>%
-  merge_at(i = 4:6, j = "Ocean", part = "body") %>%
-  hline(i = 3, border = fp_border(width = 1)) %>%
-  compose(part = "header", j = "LD", value = as_paragraph("L", as_sub("D"))) %>%
-  compose(part = "header", j = "LF", value = as_paragraph("L", as_sub("F"))) %>%
-  compose(part = "header", j = "WR", value = as_paragraph("W", as_sub("R"))) %>%
-  align(part = "header", j = 4:7, align = "center") %>%
-  align(part = "body", j = 4:7, align = "right") %>%
-  autofit() %>%
-  fix_border_issues()
-  
-
-
-
-
-
-
-
+ggsave("../outputs/charts/DESCRIPTION/SAMPLES_CAPTURE_DATE_UNCERTAINTY.png")
 
 
 

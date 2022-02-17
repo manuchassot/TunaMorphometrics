@@ -1,7 +1,17 @@
 
 print("Consolidate morphometric data...")
 
-# CONSOLIDATE DCF/EUMAP DATA SETS ####
+# Format capture date range
+SAMPLES_WITH_ENVIRONMENT[, capture_date_range := as.numeric(capture_date_range)]
+
+# Add ocean
+SAMPLES_WITH_ENVIRONMENT[ocean_code == "IO", ocean := "Indian Ocean"]
+SAMPLES_WITH_ENVIRONMENT[ocean_code == "AO", ocean := "Atlantic Ocean"]
+
+# Add species English and scientific names
+SAMPLES_WITH_ENVIRONMENT[species_code_fao == "BET", `:=` (species_english_name = "Bigeye tuna", scientific_name = "Thunnus obesus")]
+SAMPLES_WITH_ENVIRONMENT[species_code_fao == "SKJ", `:=` (species_english_name = "SKipjack tuna", scientific_name = "Katsuwonus pelamis")]
+SAMPLES_WITH_ENVIRONMENT[species_code_fao == "YFT", `:=` (species_english_name = "Yellowfin tuna", scientific_name = "Thunnus albacares")]
 
 # Add sampling year
 SAMPLES_WITH_ENVIRONMENT[, sampling_year := year(organism_sampling_date)]
@@ -37,27 +47,32 @@ SAMPLES_WITH_ENVIRONMENT_POINT[, lat_centroid := get_centroid(geom_text)[2], by 
 
 SAMPLES_WITH_ENVIRONMENT_LOCATION = rbindlist(list(SAMPLES_WITH_ENVIRONMENT_MULTIPOINT, SAMPLES_WITH_ENVIRONMENT_POINT))
 
-SAMPLES_WITH_ENVIRONMENT_NO_LOCATION = SAMPLES_WITH_ENVIRONMENT[geometry = "WKT"]
+SAMPLES_WITH_ENVIRONMENT_NO_LOCATION = SAMPLES_WITH_ENVIRONMENT[geom %in% c("WKT_AO", "WKT_IO")]
 
-# Add Longhurst provinces
+# Add Longhurst provinces when location is available
 
 sf::sf_use_s2(FALSE)
 
 LONGHURST_RAW = st_read("../inputs/shapes/Longhurst_world_v4_2010.shp")
 
-SAMPLES_WITH_ENVIRONMENT_SF = st_as_sf(SAMPLES_WITH_ENVIRONMENT, coords = c("long_centroid", "lat_centroid"))
-st_crs(SAMPLES_WITH_ENVIRONMENT_SF) = st_crs(LONGHURST_RAW)
+SAMPLES_WITH_ENVIRONMENT_LOCATION_SF = st_as_sf(SAMPLES_WITH_ENVIRONMENT_LOCATION, coords = c("long_centroid", "lat_centroid"))
+st_crs(SAMPLES_WITH_ENVIRONMENT_LOCATION_SF) = st_crs(LONGHURST_RAW)
 
-SAMPLES_WITH_ENVIRONMENT_SF = st_join(SAMPLES_WITH_ENVIRONMENT_SF, LONGHURST_RAW)
+SAMPLES_WITH_ENVIRONMENT_LOCATION_SF = st_join(SAMPLES_WITH_ENVIRONMENT_LOCATION_SF, LONGHURST_RAW)
 
-# DATA SET WITHOUT ENVIRONMENT ####
+SAMPLES_WITH_ENVIRONMENT_LOCATION_DT = as.data.table(SAMPLES_WITH_ENVIRONMENT_LOCATION_SF)[, -c("geometry")] 
 
-# Includes fish samples without spatial information
+SAMPLES_WITH_ENVIRONMENT_NO_LOCATION[, `:=` (ProvCode = NA, ProvDescr = NA)]
 
-AO_EU_DATASET = unique(RAW_SAMPLES_WITH_ENVIRONMENT[ocean_code == "AO", .(ocean_code, project, sampling_year, species_code_fao, sex, fork_length, whole_fish_weight)])
+# Produce the final data set 
 
-IO_EU_DATASET = unique(RAW_SAMPLES_WITH_ENVIRONMENT[ocean_code == "IO", .(ocean_code, project, sampling_year, species_code_fao, sex, fork_length, whole_fish_weight)])
+TUNA_SAMPLES = rbindlist(list(SAMPLES_WITH_ENVIRONMENT_LOCATION_DT, SAMPLES_WITH_ENVIRONMENT_NO_LOCATION))
 
-FULL_DATASET = rbindlist(list(AO_EU_DATASET, IO_IOT_NO_GEOMETRY, IO_EU_DATASET, IO_EMOTION, IO_FONTENEAU, IO_OTHERS, IO_IOTTP), use.names = TRUE, fill = TRUE)
+# Temp (to check with Nat)
+TUNA_SAMPLES[first_dorsal_length>100, first_dorsal_length := NA]
+
+# Remove samples from ITOP (not enough knowledge on the protocol, origins, etc.)
+TUNA_SAMPLES = TUNA_SAMPLES[project != "ITOP", ]
 
 print("Morphometric data consolidated!")
+
