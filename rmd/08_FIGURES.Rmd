@@ -1,7 +1,13 @@
 
 # Figures
 
-```{r SamplesMap, fig.cap = "Distribution of tuna sampled for morphometrics", fig.width = 12, fig.height = 6.75}
+```{r SamplesCaptureDateUncertainty, fig.cap = "Distribution of the uncertainty range (days) for the date of capture of the tropical tuna sampled for morphometrics for which information on origin was available", fig.width = 12, fig.height = 6.75}
+include_graphics("../outputs/charts/DESCRIPTION/SAMPLES_CAPTURE_DATE_UNCERTAINTY.png")
+```
+
+\pagebreak
+
+```{r SamplesMap, fig.cap = "Spatial Distribution of tropical tunas sampled for morphometrics", fig.width = 12, fig.height = 6.75}
 include_graphics("../outputs/charts/DESCRIPTION/SAMPLES_MAP.png")
 ```
 

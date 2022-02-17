@@ -1,16 +1,8 @@
 
-# Methods
-
 ## Statistical models
 
-- Mean linear regression models fitted to the log-transformed variables: observed weights are log-normally distributed and multiplicative. Lognormal error to justify. 
+Mean linear regression models were fitted to the log-transformed variables: observed weights are log-normally distributed and multiplicative. Lognormal error to justify. 
 
-- Linear regression results in a bias due to the logarithmic transformation: the model passes through the geometric mean, rather than the arithmetic mean, but this can be adjusted using a simple correction factor (Sprugel, 1983)
+Linear regression results in a bias due to the logarithmic transformation: the model passes through the geometric mean, rather than the arithmetic mean, but this can be adjusted using a simple correction factor (Sprugel, 1983)
 
-- Use of prior distributions borrowed from other time periods and areas
-
-## Prior elicitation
-
-We conducted a literature review of relationships between predorsal length and fork length and fork length and round weight for the three tropical tunas.
-
-## Bayesian inference
+\pagebreak

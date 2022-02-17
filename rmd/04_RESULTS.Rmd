@@ -1,2 +1,8 @@
 
 # Results
+
+## Tuna origin
+
+Overall, the minimum level of traceability achieved was found to be of the order of magnitude of a typical purse seiner's fishing trip. In the Atlantic Ocean, 90% of the samples with information on fish origin had a range of capture dates less than 32 days (**Fig. \@ref(fig:SamplesCaptureDateUncertainty)**). In the Indian Ocean, the range of uncertainty on fishing dates was less than 30 days for 98% of the samples.
+
+(**Fig. \@ref(fig:SamplesMap)**)

@@ -13,8 +13,6 @@ PERCENT_BET = round(N_BET/N_TOT*100, 0)
 PERCENT_SKJ = round(N_SKJ/N_TOT*100, 0)
 PERCENT_YFT = round(N_YFT/N_TOT*100, 0)
 
-
-
 SAMPLING_DESIGN_TABLE = TUNA_SAMPLES[, .(N = length(unique(organism_identifier)), LD = paste(min(round(first_dorsal_length), na.rm = TRUE), max(round(first_dorsal_length), na.rm = TRUE), sep = "-"), LF = paste(min(round(fork_length), na.rm = TRUE), max(round(fork_length), na.rm = TRUE), sep = "-"), WR = paste(min(round(whole_weight_kg, 1), na.rm = TRUE), max(round(whole_weight_kg, 1), na.rm = TRUE), sep = "-")), keyby = .(Ocean = ocean, `Species code` = species_code_fao, `Species name` = species_english_name)]
 
 SAMPLING_DESIGN_TABLE_FT =
@@ -30,6 +28,20 @@ SAMPLING_DESIGN_TABLE_FT =
   align(part = "body", j = 4:7, align = "right") %>%
   autofit() %>%
   fix_border_issues()
+
+# FISH ORIGIN UNCERTAINTY ####
+
+SAMPLES_CAPTURE_DATE_UNCERTAINTY = 
+  ggplot(data = TUNA_SAMPLES, aes(x = capture_date_range, fill = ocean, colour = ocean)) +
+  geom_histogram(bins = 30) +
+  theme_bw() +
+  scale_color_manual(values = OCEAN_COL_SHAPE$OUTLINE) +
+  scale_fill_manual(values = OCEAN_COL_SHAPE$FILL) +
+  labs(x = "Range of uncertainty (days)", y = "Frequency") +
+  scale_y_continuous(labels=function(x) format(x, big.mark = ",", scientific = FALSE)) +
+  theme(legend.position = "bottom", legend.title = element_blank())
+
+ggsave("../outputs/charts/DESCRIPTION/SAMPLES_CAPTURE_DATE_UNCERTAINTY.png")
 
 # SAMPLES MAP ####
 
@@ -92,24 +104,4 @@ BaseMap +
   labs(x = "Longitude", y = "Latitude")
 
 ggsave("../outputs/charts/DESCRIPTION/SAMPLES_MAP.png", SAMPLES_MAP, width = 12, height = 4.5/8*12)
-
-# FISH ORIGIN UNCERTAINTY ####
-
-SAMPLES_CAPTURE_DATE_UNCERTAINTY = 
-ggplot(data = TUNA_SAMPLES, aes(x = capture_date_range, fill = ocean, colour = ocean)) +
-  geom_histogram(bins = 30) +
-  theme_bw() +
-  scale_color_manual(values = OCEAN_COL_SHAPE$OUTLINE) +
-  scale_fill_manual(values = OCEAN_COL_SHAPE$FILL) +
-  labs(x = "Range of uncertainty (days)", y = "Frequency") +
-  scale_y_continuous(labels=function(x) format(x, big.mark = ",", scientific = FALSE)) +
-  theme(legend.position = "bottom", legend.title = element_blank())
-
-ggsave("../outputs/charts/DESCRIPTION/SAMPLES_CAPTURE_DATE_UNCERTAINTY.png")
-
-
-
-
-
-
 
