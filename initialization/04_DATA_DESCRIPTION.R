@@ -95,7 +95,7 @@ BaseMap +
   geom_sf(data = SAMPLES_WITH_ENVIRONMENT_LOCATION_SF, aes(shape = species_code_fao, colour = species_code_fao), alpha = 0.2) +
   guides(colour = guide_legend(override.aes = list(alpha = 1))) +
   scale_x_continuous(limits = c(-27, 80)) +
-  scale_y_continuous(limits = c(-30, 27)) +
+  scale_y_continuous(limits = c(-35, 27)) +
   scale_color_manual(values = SPECIES_COL_SHAPE$FILL) +
   scale_shape_manual(values = SPECIES_COL_SHAPE$SHAPE) + 
   #scale_alpha( values = 0.9) +

@@ -1,8 +1,11 @@
 
 # Results
 
-## Tuna origin
+## Tuna samples origin
 
-Overall, the minimum level of traceability achieved was found to be of the order of magnitude of a typical purse seiner's fishing trip. In the Atlantic Ocean, 90% of the samples with information on fish origin had a range of capture dates less than 32 days (**Fig. \@ref(fig:SamplesCaptureDateUncertainty)**). In the Indian Ocean, the range of uncertainty on fishing dates was less than 30 days for 98% of the samples.
+The samples for which information on fish origin was available are distributed across the whole purse seine fishing grounds of the eastern Atlantic and western Indian Oceans (**Fig. \@ref(fig:SamplesMap)**). In the Atlantic ocean, the samples are located from 20$^\circ$N latitude along the coasts of Mauritania in the Canary Coastal Province, down to 17$^\circ$S latitude along the coasts of Angola in the Guinea Current Coastal Province. Most tunas were caught in offshore areas, with `r pn(TUNA_SAMPLES[ProvCode == "ETRA", .N])` and `r pn(TUNA_SAMPLES[ProvCode == "WTRA", .N])` samples caught in the Western and Eastern Tropical Atlantic Provinces, respectively (**Fig. \@ref(fig:SamplesMap)**).
 
-(**Fig. \@ref(fig:SamplesMap)**)
+In the Indian Ocean, 
+
+In terms of uncertainty Overall on the fish origin, the minimum level of traceability achieved was found to be of the order of magnitude of a typical purse seiner's fishing trip, i.e., one month. In the Atlantic Ocean, 90% of the samples with information on fish origin had a range of capture dates less than 32 days (**Fig. \@ref(fig:SamplesCaptureDateUncertainty)**). In the Indian Ocean, the range of uncertainty on fishing dates was less than 30 days for 98% of the samples.
+
