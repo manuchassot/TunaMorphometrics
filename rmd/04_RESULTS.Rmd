@@ -1,11 +1,20 @@
 
 # Results
 
-## Tuna samples origin
+## Samples origin
 
-The samples for which information on fish origin was available are distributed across the whole purse seine fishing grounds of the eastern Atlantic and western Indian Oceans (**Fig. \@ref(fig:SamplesMap)**). In the Atlantic ocean, the samples are located from 20$^\circ$N latitude along the coasts of Mauritania in the Canary Coastal Province, down to 17$^\circ$S latitude along the coasts of Angola in the Guinea Current Coastal Province. Most tunas were caught in offshore areas, with `r pn(TUNA_SAMPLES[ProvCode == "ETRA", .N])` and `r pn(TUNA_SAMPLES[ProvCode == "WTRA", .N])` samples caught in the Western and Eastern Tropical Atlantic Provinces, respectively (**Fig. \@ref(fig:SamplesMap)**).
+The `r pn(N_TOT_GEOREFERENCED)` samples for which information on fish origin was available are distributed across the whole purse seine fishing grounds of the eastern Atlantic and western Indian Oceans (**Fig. \@ref(fig:SamplesMap)**). In the Atlantic ocean, the `r pn(N_AO_GEOREFERENCED)` geo-referenced samples are located from 20$^\circ$N latitude along the coasts of Mauritania in the Canary Coastal Province, down to 17$^\circ$S latitude along the coasts of Angola in the Guinea Current Coastal Province. Most tunas were caught in offshore areas, with `r pn(DESIGN_PROVINCE[ProvCode == "ETRA", N])` and `r pn(DESIGN_PROVINCE[ProvCode == "WTRA", N])` samples caught in the Western and Eastern Tropical Atlantic Provinces, respectively (**Fig. \@ref(fig:SamplesMap)**). In the Indian Ocean, the distribution of the `r pn(N_IO_GEOREFERENCED)` geo-referenced samples extends from the south of Madagascar down to 19$^\circ$S to the Arabian Sea up to 16$^\circ$N, and between 40$^\circ$ and 80$^\circ$E (**Fig. \@ref(fig:SamplesMap)**). Most tunas were caught in the Indian Monsoon Gyres Province (n = `r pn(DESIGN_PROVINCE[ProvCode == "MONS", N])`, i.e., `r DESIGN_PROVINCE[ProvCode == "MONS", PERCENT]`% of the samples with information on capture position. The remaining samples collected in the Indian Ocean mostly came from the Comoros basin in the Eastern Africa Coastal Province (`r DESIGN_PROVINCE[ProvCode == "EAFR", PERCENT]`% of the geo-referenced Indian Ocean data set) while few additional tunas were caught in the Coastal North West Arabian Upwelling Province (`r DESIGN_PROVINCE[ProvCode == "ARAB", PERCENT]`%) and Trades - Indian South Subtropical Gyre Province (`r DESIGN_PROVINCE[ProvCode == "ISSG", PERCENT]`%).
 
-In the Indian Ocean, 
+In terms of uncertainty associated with the samples origin, the minimum level of traceability achieved was found to be of the order of magnitude of a typical purse seiner's fishing trip, i.e., 30-40 days. In the Atlantic Ocean, 95% of the samples with information on fish origin had a range of capture dates less than `r TUNA_SAMPLES[ocean_code == "AO", quantile(capture_date_range, .95, na.rm = T)]` days (**Fig. \@ref(fig:SamplesCaptureDateUncertainty)**). In the Indian Ocean, the 95 percentile of the uncertainty on fishing dates was `r TUNA_SAMPLES[ocean_code == "IO", quantile(capture_date_range, .95, na.rm = T)]` days.
 
-In terms of uncertainty Overall on the fish origin, the minimum level of traceability achieved was found to be of the order of magnitude of a typical purse seiner's fishing trip, i.e., one month. In the Atlantic Ocean, 90% of the samples with information on fish origin had a range of capture dates less than 32 days (**Fig. \@ref(fig:SamplesCaptureDateUncertainty)**). In the Indian Ocean, the range of uncertainty on fishing dates was less than 30 days for 98% of the samples.
+## Pre-dorsal length -- fork length
+
+## Pre-dorsal length -- round weight
+
+## Fork length -- round weight
+
+
+
+
+
 

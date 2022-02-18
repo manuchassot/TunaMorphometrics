@@ -1,19 +1,20 @@
 
 # Figures
 
+```{r SamplesMap, fig.cap = "Spatial Distribution of tropical tunas sampled for morphometrics for which information on fish origin was derived from traceability-related information. Positions represent the coordinates of the centroid when multiple potential positions were associated with one fish (see text for details)", fig.width = 12, fig.height = 6.75}
+include_graphics("../outputs/charts/DESCRIPTION/SAMPLES_MAP.png")
+```
+
+\pagebreak
+
 ```{r SamplesCaptureDateUncertainty, fig.cap = "Distribution of the uncertainty range (days) for the date of capture of the tropical tuna sampled for morphometrics for which information on origin was available", fig.width = 12, fig.height = 6.75}
 include_graphics("../outputs/charts/DESCRIPTION/SAMPLES_CAPTURE_DATE_UNCERTAINTY.png")
 ```
 
 \pagebreak
 
-```{r SamplesMap, fig.cap = "Spatial Distribution of tropical tunas sampled for morphometrics", fig.width = 12, fig.height = 6.75}
-include_graphics("../outputs/charts/DESCRIPTION/SAMPLES_MAP.png")
-```
 
-\pagebreak
-
-```{r Priors, fig.cap = "(Top) Relationship and (bottom) boxplots of the marginal distributions of the parameters _a_ and _b_ of the statistical power relationships between fork length (L~F~) and round weight (W~T~) for skipjack, yellowfin, and bigeye tunas as available from the literature", fig.width = 8, fig.height = 4.5}
+```{r Priors, fig.cap = "(Top) Relationship and (bottom) boxplots of the marginal distributions of the parameters _a_ and _b_ of the statistical power relationships between fork length (L~F~) and round weight (W~T~) for skipjack, yellowfin, and bigeye tunas as available from the literature", fig.width = 8, fig.height = 4.5, eval = FALSE}
 include_graphics("../outputs/charts/REVIEW/FL_RW_PARAMS_ab_PLOTS.png")
 ```
 

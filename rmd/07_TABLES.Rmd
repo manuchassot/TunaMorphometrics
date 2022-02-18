@@ -1,6 +1,6 @@
 
 # Tables
 
-```{r SamplingDesignTable, tab.cap = "Number of fish samples per ocean and species in the data set and range of morphometric measurements for pre-dorsal length (L~D~; cm), fork length (L~F~; cm), and round weight (W~R~; kg)"}
+```{r SamplingDesignTable, tab.cap = "Number of fish samples per ocean and species in the data set and range of morphometric measurements for pre-dorsal length (LD; cm), fork length (LF; cm), and round weight (WR; kg)"}
 SAMPLING_DESIGN_TABLE_FT
 ```

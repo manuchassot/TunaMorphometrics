@@ -4,6 +4,10 @@ print("Consolidate morphometric data...")
 # Format capture date range
 SAMPLES_WITH_ENVIRONMENT[, capture_date_range := as.numeric(capture_date_range)]
 
+# Temporary corrections
+SAMPLES_WITH_ENVIRONMENT[long == 18.5, ocean_code := "AO"]
+SAMPLES_WITH_ENVIRONMENT[long == 4.75, ocean_code := "AO"]
+
 # Add ocean
 SAMPLES_WITH_ENVIRONMENT[ocean_code == "IO", ocean := "Indian Ocean"]
 SAMPLES_WITH_ENVIRONMENT[ocean_code == "AO", ocean := "Atlantic Ocean"]
@@ -73,6 +77,9 @@ TUNA_SAMPLES[first_dorsal_length>100, first_dorsal_length := NA]
 
 # Remove samples from ITOP (not enough knowledge on the protocol, origins, etc.)
 TUNA_SAMPLES = TUNA_SAMPLES[project != "ITOP", ]
+
+# Select only tunas caught with purse seine
+TUNA_SAMPLES = TUNA_SAMPLES[gear_code == "PS", ]
 
 print("Morphometric data consolidated!")
 

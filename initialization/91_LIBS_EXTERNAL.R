@@ -31,6 +31,7 @@ p_load(
   "boa",
   "wellknown",
   "rnaturalearth",
-  "MASS"
+  "MASS",
+  "ftExtra"
   )
 

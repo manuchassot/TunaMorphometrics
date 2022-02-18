@@ -1,10 +1,22 @@
 
 # SAMPLING DESIGN ####
 
+## OCEAN ####
 N_TOT = TUNA_SAMPLES[, .N]
 N_IO  = TUNA_SAMPLES[ocean_code == "IO", .N]
 N_AO  = TUNA_SAMPLES[ocean_code == "AO", .N]
 
+N_TOT_GEOREFERENCED = TUNA_SAMPLES[!is.na(ProvCode), .N]
+N_IO_GEOREFERENCED = TUNA_SAMPLES[ocean_code == "IO" & !is.na(ProvCode), .N]
+N_AO_GEOREFERENCED = TUNA_SAMPLES[ocean_code == "AO" & !is.na(ProvCode), .N]
+  
+## PROVINCES ####
+# Geo-referenced data set
+DESIGN_PROVINCE = TUNA_SAMPLES[!is.na(ProvCode), .N, keyby = .(ocean_code, ProvCode)]
+DESIGN_PROVINCE[, N_OCEAN := sum(N), by = .(ocean_code)]
+DESIGN_PROVINCE[, PERCENT := round(N/N_OCEAN*100, 1)]
+
+## SPECIES ####
 N_BET = TUNA_SAMPLES[species_code_fao == "BET", .N]
 N_SKJ = TUNA_SAMPLES[species_code_fao == "SKJ", .N]
 N_YFT = TUNA_SAMPLES[species_code_fao == "YFT", .N] 
@@ -12,6 +24,8 @@ N_YFT = TUNA_SAMPLES[species_code_fao == "YFT", .N]
 PERCENT_BET = round(N_BET/N_TOT*100, 0)
 PERCENT_SKJ = round(N_SKJ/N_TOT*100, 0)
 PERCENT_YFT = round(N_YFT/N_TOT*100, 0)
+
+## ARTICLE TABLE ####
 
 SAMPLING_DESIGN_TABLE = TUNA_SAMPLES[, .(N = length(unique(organism_identifier)), LD = paste(min(round(first_dorsal_length), na.rm = TRUE), max(round(first_dorsal_length), na.rm = TRUE), sep = "-"), LF = paste(min(round(fork_length), na.rm = TRUE), max(round(fork_length), na.rm = TRUE), sep = "-"), WR = paste(min(round(whole_weight_kg, 1), na.rm = TRUE), max(round(whole_weight_kg, 1), na.rm = TRUE), sep = "-")), keyby = .(Ocean = ocean, `Species code` = species_code_fao, `Species name` = species_english_name)]
 

@@ -4,52 +4,57 @@ TUNA_SAMPLES[, log10FL  := log(fork_length, 10)]
 TUNA_SAMPLES[, log10RW  := log(whole_weight_kg, 10)]
 TUNA_SAMPLES[, quarter  := factor(capture_quarter)]
 TUNA_SAMPLES[, ProvCode := factor(ProvCode)]
+TUNA_SAMPLES[, aggregation := factor(aggregation)]
 
-# BET models ####
+# BIGEYE TUNA ####
 
-# Define data set
-BET_SAMPLES = TUNA_SAMPLES[species_code_fao == "BET" & ProvCode %in% c("GUIN", "ETRA", "MONS", "WTRA")]
+# Geo-referenced data set 
+BET_SAMPLES = TUNA_SAMPLES[species_code_fao == "BET" & ProvCode %in% c("MONS", "ETRA", "GUIN", "WTRA")]
 
-# Model with sex and school type (removing immature fish)
-BET_LM_FULL = lm(log10RW ~ log10FL + aggregation + sex + quarter + ProvCode, data = BET_SAMPLES[sex %in% c("M", "F") & aggregation %in% c("DFAD", "FSC")])
+# Full model with covariates
+BET_FL_RD_LM_FULL = lm(log10RW ~ log10FL + ProvCode  + quarter + aggregation + sex, data = BET_SAMPLES[sex %in% c("M", "F") & aggregation %in% c("DFAD", "FSC")])
 
-stepAIC(BET_LM_FULL)
-plot(BET_LM_FULL)
-anova(BET_LM_FULL)
-summary(BET_LM_FULL)
-
-# Final model
-BET_LM_FULL = lm(log10RW ~ log10FL + quarter + ProvCode, data = BET_SAMPLES)
-
-stepAIC(BET_LM_FULL)
-plot(BET_LM_FULL)
-anova(BET_LM_FULL)
-summary(BET_LM_FULL)
-
-# YFT models ####
-
-# Define data set
-YFT_SAMPLES = TUNA_SAMPLES[species_code_fao == "YFT" & ProvCode %in% c("GUIN", "ETRA", "MONS")]
-
-# Model with sex (removing immature fish)
-YFT_LM_FULL_SEX = lm(log10RW ~ log10FL + sex + aggregation + quarter + ProvCode, data = YFT_SAMPLES[sex %in% c("M", "F") & aggregation %in% c("DFAD", "FSC")])
-
-#stepAIC(YFT_LM_FULL_SEX)
-#plot(YFT_LM_FULL_SEX)
-#anova(YFT_LM_FULL_SEX)
-#summary(YFT_LM_FULL_SEX)
+# stepAIC(BET_FL_RD_LM_FULL)
+# covariates aggregation and sex are not kept in the model
 
 # Final model
-YFT_LM_FULL = lm(log10RW ~ log10FL + quarter + ProvCode, data = YFT_SAMPLES)
+BET_FL_RD_FULL_FINAL = lm(log10RW ~ log10FL + ProvCode + quarter, data = BET_SAMPLES)
 
-stepAIC(BET_LM_FULL)
-plot(BET_LM_FULL)
-anova(BET_LM_FULL)
-summary(BET_LM_FULL)
+ANOVA_BET_FL_RD_FULL = anova_table("Bigeye tuna", BET_FL_RD_FULL_FINAL)
+R2_BET_FL_RD_FULL    = (summary(BET_FL_RD_FULL_FINAL))$r.squared
 
-# SKJ models ####
+# Model without covariate
+BET_FL_RD_FINAL = lm(log10RW ~ log10FL, data = TUNA_SAMPLES[species_code_fao == "BET"])
 
-# Define data set
+ANOVA_BET_FL_RD = anova_table("Bigeye tuna", BET_FL_RD_FINAL)
+R2_BET_FL_RD    = (summary(BET_FL_RD_FINAL))$r.squared
+
+# YELLOWFIN TUNA ####
+
+# Geo-referenced data set
+YFT_SAMPLES = TUNA_SAMPLES[species_code_fao == "YFT" & ProvCode %in% c("MONS", "ETRA", "EAFR", "GUIN", "ARAB", "WTRA")]
+
+# Full model with covariates
+YFT_FL_RD_LM_FULL = lm(log10RW ~ log10FL + ProvCode + quarter + aggregation + sex, data = YFT_SAMPLES[sex %in% c("M", "F") & aggregation %in% c("DFAD", "FSC")])
+
+#stepAIC(YFT_FL_RD_LM_FULL)
+# all covariates kept in the model
+
+# Final model
+YFT_FL_RD_FULL_FINAL = YFT_FL_RD_LM_FULL
+
+ANOVA_YFT_FL_RD_FULL = anova_table("Yellowfin tuna", YFT_FL_RD_FULL_FINAL)
+R2_YFT_FL_RD_FULL    = (summary(YFT_FL_RD_FULL_FINAL))$r.squared
+
+# Model without covariate
+YFT_FL_RD_FINAL = lm(log10RW ~ log10FL, data = TUNA_SAMPLES[species_code_fao == "YFT"])
+
+ANOVA_YFT_FL_RD = anova_table("Yellowfin tuna", YFT_FL_RD_FINAL)
+R2_YFT_FL_RD    = (summary(YFT_FL_RD_FINAL))$r.squared
+
+# SKIPJACK TUNA ####
+
+# Geo-referenced data set
 SKJ_SAMPLES = TUNA_SAMPLES[species_code_fao == "SKJ" & ProvCode %in% c("CNRY", "GUIN", "ETRA", "MONS", "WTRA")]
 
 # Model with measuring device
