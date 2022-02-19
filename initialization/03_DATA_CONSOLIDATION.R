@@ -81,5 +81,8 @@ TUNA_SAMPLES = TUNA_SAMPLES[project != "ITOP", ]
 # Select only tunas caught with purse seine
 TUNA_SAMPLES = TUNA_SAMPLES[gear_code == "PS", ]
 
+# Remove obvious errors
+TUNA_SAMPLES = TUNA_SAMPLES[!organism_identifier %in% c("SKJ_20210812_21", "SKJ_20210727_17", "IOT_2016_0405", "IOT_2016_0422", "IOT_2974", "IOT_2454", "IOT2014-016", "IOT_0247", "IOT_3363", "IOT_3366", "IOT_3672", "IOT_3755", "SKJ-09.M1.L17.7", "SKJ-09.M1.L25.23", "SKJ-09.M2.L10.16", "IOT_2938", "SA01893", "DCF-AO-1280", "SKJ-09.M3.L22.4", "IOT_2016_0414", "IOT_3460", "SKJ_20210916_17", "SKJ_20210916_39")]
+
 print("Morphometric data consolidated!")
 

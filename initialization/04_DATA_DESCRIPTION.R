@@ -100,6 +100,9 @@ LONGHURST_CENTROIDS_FOR_MAP[ProvCode == "GUIN", `:=` (X = 7, Y = 3)]
 LONGHURST_CENTROIDS_FOR_MAP = st_as_sf(LONGHURST_CENTROIDS_FOR_MAP, coords = c("X", "Y"))
 st_crs(LONGHURST_CENTROIDS_FOR_MAP) = st_crs(LONGHURST_RAW)
 
+# Factorize Species
+SAMPLES_WITH_ENVIRONMENT_LOCATION_SF$species_code_fao = factor(SAMPLES_WITH_ENVIRONMENT_LOCATION_SF$species_code_fao, levels = c("Bigeye tuna", "Yellowfin tuna", "Skipjack tuna"))
+
 # Map of fish samples
 # Long/lat represent the centroids of the positions
 SAMPLES_MAP = 

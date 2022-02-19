@@ -7,7 +7,7 @@ SAMPLING_DESIGN_TABLE_FT
 
 \pagebreak
 
-```{r AnovaTable, tab.cap = "Analysis of variance outputs for the annual quantity of fuel consumed (t) by largescale purse seiners. YOC ¼ Year of construction; SetsFAD ¼ number of sets on schools associated with fish aggregating devices; LOA ¼ Length overall; SetsFSC ¼ number of sets on free swimming schools; df: degrees of freedom; F ¼ Test statistic."}
+```{r AnovaTable, tab.cap = "Summary table of analysis of variance of the round weight in tropical tuna. F~L~ = fork length; Province = Longurst ecological province; Quarter = quarter of capture; SchoolType = ; type of school association; Df: degrees of freedom"}
 FL_RD_LM_WITH_COV_FINAL_ANOVAS_FT
 ```
 

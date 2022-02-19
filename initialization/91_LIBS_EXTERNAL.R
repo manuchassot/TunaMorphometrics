@@ -35,3 +35,6 @@ p_load(
   "ftExtra"
   )
 
+# Set chart theme to theme_bw
+#theme_set(theme_bw())
+

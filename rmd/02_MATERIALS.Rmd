@@ -22,6 +22,10 @@ Traceability relies on the ability of accurately and precisely determining the o
 
 Information on the origin of the fish being processed in the canneries relied on three main data sources: (i) vessel identifier and date of purchase by the cannery to determine fishing trip, (ii) well plans of chief engineers which record the origin of the catch (i.e., fishing set) stored in each freezing well, and (iii) skipper logbooks which record the date and position of each fishing set [@Chassot2017]. Based on the information made available by the canning and fishing companies, we were able to determine the potential dates and geographic positions of capture for more than half of the data set, i.e., for `r pn(TUNA_SAMPLES[!is.na(ProvCode), .N])` fish. We then estimated the coordinates of the centroid (i.e., barycenter) of each sample and assigned them an ecological province described by specific environmental conditions such as currents and nutrient concentrations [@Longhurst1998]. To assess the level of knowledge on the origin of the samples, the range of uncertainty in the date of capture was estimated. Traceability was only possible to the ocean of capture for `r pn(TUNA_SAMPLES[is.na(ProvCode), .N])` samples.
 
+### Literature review
+
+We reviewed the parameters estimates of the relationships between _L~D_~_L~F~_ and _L~F~_-_L~W~_ for bigeye, skipjack, and yellowfin tuna available from peer-reviewed and grey literature and only selected studies based on a sample size of at least 20 observations. 
+
 <!-- ### Data quality control -->
 
 <!-- Data collected and stored in the database were systematically checked for integrity. Consistency, validation and formatting controls were carried out when entering the data. Errors can be made at the time of transcription and data entry. Data were controlled with charts, comparison of values, or by checking the timeline for the dates. A correction was made on the basis of the physical data entry sheets on which the data are recorded during sampling. -->
