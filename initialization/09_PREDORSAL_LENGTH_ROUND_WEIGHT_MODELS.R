@@ -108,8 +108,8 @@ FDL_RD_PARAMS_ESTIMATED = rbindlist(list(BET_FDL_RD_PARAMS, SKJ_FDL_RD_PARAMS, Y
 # Build complete table of ANOVA results
 
 FDL_RD_LM_WITH_COV_FINAL_ANOVAS = rbindlist(list(BET_FDL_RD_LM_WITH_COV_FINAL_ANOVA,
-                                                SKJ_FDL_RD_LM_WITH_COV_FINAL_ANOVA,
-                                                YFT_FDL_RD_LM_WITH_COV_FINAL_ANOVA))
+                                                 SKJ_FDL_RD_LM_WITH_COV_FINAL_ANOVA,
+                                                 YFT_FDL_RD_LM_WITH_COV_FINAL_ANOVA))
 
 FDL_RD_LM_WITH_COV_FINAL_ANOVAS_FT =
   FDL_RD_LM_WITH_COV_FINAL_ANOVAS %>% 
