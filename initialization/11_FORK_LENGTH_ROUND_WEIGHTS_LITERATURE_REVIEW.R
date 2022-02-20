@@ -77,4 +77,6 @@ OTHER_PARAMS = data.table(read.xlsx("../inputs/data/TRFMO_PARAMETERS.xlsx", shee
 
 FL_RD_PARAMS_REVIEW = rbindlist(list(FISHBASE_PARAMS, TRFMO_PARAMS, OTHER_PARAMS), use.names = TRUE)
 
+FL_RD_PARAMS_TABLE_REVIEW = FL_RD_PARAMS_REVIEW[CombinedSource == "Literature review", .(Ocean, SpeciesCode, SpeciesName, Sex, SampleSize, ForkLengthMin, ForkLengthMax, a, b, Reference)][order(SpeciesCode, Ocean)]
+
 print("Length-weight parameters for tropical tuna reviewed!")

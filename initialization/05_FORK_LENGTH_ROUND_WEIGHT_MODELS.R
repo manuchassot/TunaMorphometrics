@@ -1,14 +1,6 @@
 
 # FORK LENGTH - ROUND WEIGHT ####
 
-# Prepare the data
-TUNA_SAMPLES[, log10FL  := log(fork_length, 10)]
-TUNA_SAMPLES[, log10RW  := log(whole_weight_kg, 10)]
-TUNA_SAMPLES[, Quarter  := factor(capture_quarter)]
-TUNA_SAMPLES[, Province := factor(ProvCode)]
-TUNA_SAMPLES[, SchoolType := factor(aggregation)]
-TUNA_SAMPLES[, Sex := factor(sex)]
-
 ## BIGEYE TUNA ####
 
 # Geo-referenced data set 
@@ -127,29 +119,4 @@ FL_RD_LM_WITH_COV_FINAL_ANOVAS_FT =
   hline(i = c(4, 10), border = fp_border(width = 1)) %>%
   align(part = "header", j = c(2, 4:7), align = "center") %>%
   width(width = c(1.2, 1.1, 0.6, 1, 1, 1, 0.7)) %>%
-   fix_border_issues()
-
-# Combine review data set of parameters with new estimates
-
-FL_RD_PARAMS = rbindlist(list(FL_RD_PARAMS_REVIEW, FL_RD_PARAMS_ESTIMATED))
-FL_RD_PARAMS[Origin != "THIS STUDY" , CombinedSource := "Literature review"]
-FL_RD_PARAMS[Origin == "THIS STUDY",  CombinedSource := "This Study"]
-
-# Factorize and order the species
-FL_RD_PARAMS[, SpeciesName := factor(SpeciesName, levels = c("Bigeye tuna", "Yellowfin tuna", "Skipjack tuna"), ordered = TRUE)]
-
-FL_RD_PARAMS_TABLE_STUDY = FL_RD_PARAMS[CombinedSource != "Literature review", .(Ocean, SpeciesCode, SpeciesName, Sex, SampleSize, ForkLengthMin, ForkLengthMax, a, b)][order(Ocean, -SpeciesName)]
-
-FL_RD_PARAMS_TABLE_STUDY_FT =
-  FL_RD_PARAMS_TABLE_STUDY %>%
-  flextable() %>%
-  set_header_labels(SpeciesCode = "Species code", SpeciesName = "Species name", SampleSize = "Sample size") %>%
-  align(j = c("a", "b"), part = "header", align = "center") %>%
-  hline(i = 3) %>%
-  autofit()
-
-
-
-FL_RD_PARAMS_TABLE_REVIEW = FL_RD_PARAMS[CombinedSource == "Literature review", .(Ocean, SpeciesCode, SpeciesName, Sex, SampleSize, ForkLengthMin, ForkLengthMax, a, b, Reference)][order(SpeciesCode, Ocean)]
-
-
+  fix_border_issues()

@@ -101,7 +101,7 @@ LONGHURST_CENTROIDS_FOR_MAP = st_as_sf(LONGHURST_CENTROIDS_FOR_MAP, coords = c("
 st_crs(LONGHURST_CENTROIDS_FOR_MAP) = st_crs(LONGHURST_RAW)
 
 # Factorize Species
-SAMPLES_WITH_ENVIRONMENT_LOCATION_SF$species_code_fao = factor(SAMPLES_WITH_ENVIRONMENT_LOCATION_SF$species_code_fao, levels = c("Bigeye tuna", "Yellowfin tuna", "Skipjack tuna"))
+SAMPLES_WITH_ENVIRONMENT_LOCATION_SF$species_english_name = factor(SAMPLES_WITH_ENVIRONMENT_LOCATION_SF$species_english_name, levels = c("Bigeye tuna", "Yellowfin tuna", "Skipjack tuna"))
 
 # Map of fish samples
 # Long/lat represent the centroids of the positions
@@ -109,13 +109,11 @@ SAMPLES_MAP =
 BaseMap +
   geom_sf(data = LONGHURST, fill = NA) +
   geom_sf_text(data = LONGHURST_CENTROIDS_FOR_MAP, aes(label = ProvCode), show.legend = FALSE, check_overlap = TRUE) +
-  geom_sf(data = SAMPLES_WITH_ENVIRONMENT_LOCATION_SF, aes(shape = species_code_fao, colour = species_code_fao), alpha = 0.2) +
-  guides(colour = guide_legend(override.aes = list(alpha = 1))) +
+  geom_sf(data = SAMPLES_WITH_ENVIRONMENT_LOCATION_SF, aes(colour = species_english_name), alpha = 0.1) +
   scale_x_continuous(limits = c(-27, 80)) +
   scale_y_continuous(limits = c(-35, 27)) +
   scale_color_manual(values = SPECIES_COL_SHAPE$FILL) +
-  scale_shape_manual(values = SPECIES_COL_SHAPE$SHAPE) + 
-  #scale_alpha( values = 0.9) +
+  guides(colour = guide_legend(override.aes = list(alpha = 1))) +
   theme_bw() +
   theme(legend.position = "bottom", legend.title = element_blank()) +
   labs(x = "Longitude", y = "Latitude")

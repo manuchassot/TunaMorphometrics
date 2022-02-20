@@ -81,8 +81,27 @@ TUNA_SAMPLES = TUNA_SAMPLES[project != "ITOP", ]
 # Select only tunas caught with purse seine
 TUNA_SAMPLES = TUNA_SAMPLES[gear_code == "PS", ]
 
-# Remove obvious errors
-TUNA_SAMPLES = TUNA_SAMPLES[!organism_identifier %in% c("SKJ_20210812_21", "SKJ_20210727_17", "IOT_2016_0405", "IOT_2016_0422", "IOT_2974", "IOT_2454", "IOT2014-016", "IOT_0247", "IOT_3363", "IOT_3366", "IOT_3672", "IOT_3755", "SKJ-09.M1.L17.7", "SKJ-09.M1.L25.23", "SKJ-09.M2.L10.16", "IOT_2938", "SA01893", "DCF-AO-1280", "SKJ-09.M3.L22.4", "IOT_2016_0414", "IOT_3460", "SKJ_20210916_17", "SKJ_20210916_39")]
+# Remove obvious errors in IO SKJ weights
+TUNA_SAMPLES = TUNA_SAMPLES[!organism_identifier %in% c("SKJ_20210812_21", "SKJ_20210727_17", "IOT_2016_0405", "IOT_2016_0422", "IOT_2974", "IOT_2454", "IOT2014-016", "IOT_0247", "IOT_3363", "IOT_3366", "IOT_3672", "IOT_3755", "SKJ-09.M1.L17.7", "SKJ-09.M1.L25.23", "SKJ-09.M2.L10.16", "IOT_2938", "SA01893", "DCF-AO-1280", "SKJ-09.M3.L22.4", "IOT_2016_0414", "IOT_3460", "SKJ_20210916_17", "SKJ_20210916_39", "IOT_3128", "IOT_0588", "IOT_3685", "SKJ_20210824_30", "SKJ_20210824_4", "SKJ_20210907_19", "SKJ_20210826_1", "IOT_2016_0416", "IOT_2016_0423", "IOT_2016_0431", "IOT_1033", "SKJ_20210916_31", "IOT_0613", "SKJ_20210701_1", "IOT_2016_0442", "IOT_2494", "IOT_2508", "IOT_2016_0420", "IOT_2016_0458", "IOT_2016_0488", "IOT_0481", "IOT_3365", "IOT_2490")]
+
+# Remove obvious errors in IO SKJ lengths
+TUNA_SAMPLES = TUNA_SAMPLES[!organism_identifier %in% c("SKJ_20210701_14")]
+
+# Remove obvious errors in IO YFT weights
+TUNA_SAMPLES = TUNA_SAMPLES[!organism_identifier %in% c("DCF6878", "IOT24", "OT11610", "A260", "YFT-09.M2.L5.4","IOT_2016_0305", "YFT-09.M2.L4.12", "DCF0031", "DCF18985", "DCF_18985")]
+
+TUNA_SAMPLES[organism_identifier == "SA0031", first_dorsal_length := NA]
+
+# Prepare the data for modelling
+TUNA_SAMPLES[, log10FL  := log(fork_length, 10)]
+TUNA_SAMPLES[, log10RW  := log(whole_weight_kg, 10)]
+TUNA_SAMPLES[, Quarter  := factor(capture_quarter)]
+TUNA_SAMPLES[, Province := factor(ProvCode)]
+TUNA_SAMPLES[, SchoolType := factor(aggregation)]
+TUNA_SAMPLES[, Sex := factor(sex)]
+TUNA_SAMPLES[, log10FDL  := log(first_dorsal_length, 10)]
+
+
 
 print("Morphometric data consolidated!")
 

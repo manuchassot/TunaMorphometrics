@@ -2,15 +2,15 @@
 # FORK LENGTH - ROUND WEIGHT
 
 FL_RD_PREDICTIONs_FUNCTION = function(Dataset, OceanCode = "AO", SpeciesCode = "BET", FinalModel){
-
+  
   InputDataSet = Dataset[ocean_code == OceanCode & species_code_fao == SpeciesCode & !is.na(fork_length) & !is.na(whole_weight_kg)]
   
   # Data frame for predictions
   
   PredictionsDF = data.table(ocean_code = OceanCode, species_code_fao = SpeciesCode, fork_length = seq(floor(min(InputDataSet$fork_length, na.rm = TRUE)), ceiling(max(InputDataSet$fork_length, na.rm = TRUE)), 0.1))
-
+  
   PredictionsDF[, whole_weight_kg := 10^coef(FinalModel)[1]*exp(var(residuals(FinalModel))*2.651) * fork_length ^ coef(FinalModel)[2]]
-
+  
   return(list(DATA = InputDataSet, PREDICTIONS = PredictionsDF))
 }
 
@@ -57,7 +57,7 @@ FORK_LENGTH_ROUND_WEIGHT_FIT_IO_YFT =
   scale_x_continuous(limits = c(29, 178)) +
   scale_y_continuous(limits = c(0, 119)) +
   labs(x = "Fork length (cm)", y = "Round weight (kg)", title = "Yellowfin tuna | Indian Ocean") +
-theme(strip.background = element_rect(fill = "white"), strip.text.x = element_text(size = 12), legend.position = "none")
+  theme(strip.background = element_rect(fill = "white"), strip.text.x = element_text(size = 12), legend.position = "none")
 
 ggsave("../outputs/charts/FITS/FORK_LENGTH_ROUND_WEIGHT_FIT_IO_YFT.png", FORK_LENGTH_ROUND_WEIGHT_FIT_IO_YFT, width = 6, height = 4.5)
 

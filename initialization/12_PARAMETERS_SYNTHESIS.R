@@ -1,4 +1,23 @@
 
+# Combine review data set of parameters with new estimates
+
+FL_RD_PARAMS = rbindlist(list(FL_RD_PARAMS_REVIEW, FL_RD_PARAMS_ESTIMATED))
+FL_RD_PARAMS[Origin != "THIS STUDY" , CombinedSource := "Literature review"]
+FL_RD_PARAMS[Origin == "THIS STUDY",  CombinedSource := "This Study"]
+
+# Factorize and order the species
+FL_RD_PARAMS[, SpeciesName := factor(SpeciesName, levels = c("Bigeye tuna", "Yellowfin tuna", "Skipjack tuna"), ordered = TRUE)]
+
+FL_RD_PARAMS_TABLE_STUDY = FL_RD_PARAMS[CombinedSource != "Literature review", .(Ocean, SpeciesCode, SpeciesName, Sex, SampleSize, ForkLengthMin, ForkLengthMax, a, b)][order(Ocean, -SpeciesName)]
+
+FL_RD_PARAMS_TABLE_STUDY_FT =
+  FL_RD_PARAMS_TABLE_STUDY %>%
+  flextable() %>%
+  set_header_labels(SpeciesCode = "Species code", SpeciesName = "Species name", SampleSize = "Sample size") %>%
+  align(j = c("a", "b"), part = "header", align = "center") %>%
+  hline(i = 3) %>%
+  autofit()
+
 # Statistics
 #FL_RD_PARAMS[, as.list(summary(a*1e5)), keyby = .(SpeciesName, SpeciesCode)]
 #FL_RD_PARAMS[, as.list(summary(b)), keyby = .(SpeciesName, SpeciesCode)]
