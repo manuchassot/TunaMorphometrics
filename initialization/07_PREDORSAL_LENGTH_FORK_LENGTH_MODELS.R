@@ -98,7 +98,7 @@ SKJ_FDL_FL_PARAMS = data.table(Ocean = c("Atlantic Ocean", "Indian Ocean"),
                                Reference = "IOTC",
                                Origin = "THIS STUDY")
 
-# YELLOWFIN TUNA ####
+## YELLOWFIN TUNA ####
 
 # Geo-referenced data set
 YFT_FDL_FL_SAMPLES_COVARIATES = TUNA_SAMPLES[species_code_fao == "YFT" & ProvCode %in% c("MONS", "ETRA", "EAFR", "GUIN", "ARAB", "WTRA") & sex %in% c("M", "F") & aggregation %in% c("DFAD", "FSC") & !is.na(first_dorsal_length) & !is.na(fork_length)]

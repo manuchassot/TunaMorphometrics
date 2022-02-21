@@ -96,9 +96,19 @@ TUNA_SAMPLES[organism_identifier == "SA0782", first_dorsal_length := NA]
 TUNA_SAMPLES[organism_identifier == "SA0773", first_dorsal_length := NA]
 TUNA_SAMPLES[organism_identifier == "SA0777", first_dorsal_length := NA]
 
+TUNA_SAMPLES[organism_identifier == "SKJ_20210701_14", first_dorsal_length := 19] #assumed instead of 29
+
 TUNA_SAMPLES[organism_identifier == "SA01132", fork_length := NA]
 
 TUNA_SAMPLES[organism_identifier == "SA01034", fork_length := NA]
+
+TUNA_SAMPLES[organism_identifier == "IOT_5065", fork_length := NA]  # very small FL
+TUNA_SAMPLES[organism_identifier == "IOT_5066", fork_length := NA]  # very small FL
+TUNA_SAMPLES[organism_identifier == "IOT_5067", fork_length := NA]  # very small FL
+TUNA_SAMPLES[organism_identifier == "IOT_5011", fork_length := NA]  # inconsistent
+TUNA_SAMPLES[organism_identifier == "IOT_4675", fork_length := NA]  # inconsistent
+TUNA_SAMPLES[organism_identifier == "IOT_4871", fork_length := NA]  # inconsistent
+TUNA_SAMPLES[organism_identifier == "IOT_4585", fork_length := NA]  # inconsistent
 
 # Remove obvious errors in AO SKJ weights
 TUNA_SAMPLES[organism_identifier == "DCF-AO-1107", whole_weight_kg := NA]
@@ -106,8 +116,6 @@ TUNA_SAMPLES[organism_identifier == "DCF-AO-1372", whole_weight_kg := NA]
 
 # Remove obvious errors in IO YFT weights
 TUNA_SAMPLES[organism_identifier %in% c("DCF6878", "IOT24", "OT11610", "A260", "YFT-09.M2.L5.4","IOT_2016_0305", "YFT-09.M2.L4.12", "DCF0031", "DCF18985", "DCF_18985"), whole_weight_kg := NA]
-
-
 
 # Prepare the data for modelling
 TUNA_SAMPLES[, log10FL  := log(fork_length, 10)]
