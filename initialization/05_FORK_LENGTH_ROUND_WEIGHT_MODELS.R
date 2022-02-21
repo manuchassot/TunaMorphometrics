@@ -4,23 +4,28 @@
 ## BIGEYE TUNA ####
 
 # Geo-referenced data set 
-BET_SAMPLES = TUNA_SAMPLES[species_code_fao == "BET" & ProvCode %in% c("MONS", "ETRA", "GUIN", "WTRA")]
+BET_SAMPLES_FL_RD_FULL = TUNA_SAMPLES[species_code_fao == "BET" & ProvCode %in% c("MONS", "ETRA", "GUIN", "WTRA") & sex %in% c("M", "F") & SchoolType %in% c("DFAD", "FSC") & !is.na(fork_length) & !is.na(whole_weight_kg)]
 
 # Full model with covariates
-BET_FL_RD_LM_FULL = lm(log10RW ~ log10FL + Province  + Quarter + SchoolType + Sex, data = BET_SAMPLES[sex %in% c("M", "F") & aggregation %in% c("DFAD", "FSC")])
+BET_FL_RD_LM_FULL = lm(log10RW ~ log10FL + Province  + Quarter + SchoolType + Sex, data = BET_SAMPLES_FL_RD_FULL)
 
 # stepAIC(BET_FL_RD_LM_FULL)
 # covariates SchoolType and Sex are not kept in the model
 
 # Final model
-BET_FL_RD_LM_WITH_COV_FINAL = lm(log10RW ~ log10FL + Province + Quarter, data = BET_SAMPLES)
+BET_SAMPLES_FL_RD_COVARIATES = TUNA_SAMPLES[species_code_fao == "BET" & ProvCode %in% c("MONS", "ETRA", "GUIN", "WTRA") & !is.na(fork_length) & !is.na(whole_weight_kg)]
 
-BET_FL_RD_LM_WITH_COV_FINAL_ANOVA = anova_table("Bigeye tuna", BET_FL_RD_LM_WITH_COV_FINAL)
+BET_FL_RD_LM_WITH_COV_FINAL = lm(log10RW ~ log10FL + Province + Quarter, data = BET_SAMPLES_FL_RD_COVARIATES)
+
+BET_FL_RD_LM_WITH_COV_FINAL_ANOVA = anova_table(SpeciesName = "Bigeye tuna", LinearModel = BET_FL_RD_LM_WITH_COV_FINAL, MeanSquaresDigits = 3)
 BET_FL_RD_LM_WITH_COV_FINAL_R2    = (summary(BET_FL_RD_LM_WITH_COV_FINAL))$r.squared
 
 # Model without covariate
-BET_FL_RD_LM_AO_FINAL = lm(log10RW ~ log10FL, data = TUNA_SAMPLES[species_code_fao == "BET" & ocean_code == "AO"])
-BET_FL_RD_LM_IO_FINAL = lm(log10RW ~ log10FL, data = TUNA_SAMPLES[species_code_fao == "BET" & ocean_code == "IO"])
+
+BET_SAMPLES_FL_RD = TUNA_SAMPLES[species_code_fao == "BET" & !is.na(fork_length) & !is.na(whole_weight_kg)]
+
+BET_FL_RD_LM_AO_FINAL = lm(log10RW ~ log10FL, data = BET_SAMPLES_FL_RD[ocean_code == "AO"])
+BET_FL_RD_LM_IO_FINAL = lm(log10RW ~ log10FL, data = BET_SAMPLES_FL_RD[ocean_code == "IO"])
 
 BET_FL_RD_LM_AO_ANOVA = anova_table("Bigeye tuna", BET_FL_RD_LM_AO_FINAL)
 BET_FL_RD_LM_AO_R2    = (summary(BET_FL_RD_LM_AO_FINAL))$r.squared
@@ -32,40 +37,71 @@ BET_FL_RD_LM_IO_R2    = (summary(BET_FL_RD_LM_IO_FINAL))$r.squared
 a_BET_FL_RD_IO        = 10^coef(BET_FL_RD_LM_IO_FINAL)[1]*exp(var(residuals(BET_FL_RD_LM_IO_FINAL))*2.651)
 b_BET_FL_RD_IO        = coef(BET_FL_RD_LM_IO_FINAL)[2]
 
-BET_FL_RD_PARAMS = data.table(Ocean = c("Atlantic Ocean", "Indian Ocean"), SpeciesCode = "BET", SpeciesName = "Bigeye tuna", SpeciesScientific = c("Thunnus obesus"), Sex = "Mixed", Source = "LF", Target = "RD", SampleSize = c(TUNA_SAMPLES[species_code_fao == "BET" & ocean_code == "AO", .N], TUNA_SAMPLES[species_code_fao == "BET" & ocean_code == "IO", .N]), ForkLengthMin = c(TUNA_SAMPLES[species_code_fao == "BET" & ocean_code == "IO", min(fork_length, na.rm = TRUE)], TUNA_SAMPLES[species_code_fao == "BET" & ocean_code == "IO", min(fork_length, na.rm = TRUE)]), ForkLengthMax = c(TUNA_SAMPLES[species_code_fao == "BET" & ocean_code == "AO", max(fork_length, na.rm = TRUE)], TUNA_SAMPLES[species_code_fao == "BET" & ocean_code == "IO", max(fork_length, na.rm = TRUE)]), a = c(a_BET_FL_RD_AO, a_BET_FL_RD_IO), b = c(b_BET_FL_RD_AO, b_BET_FL_RD_IO), Reference = "IOTC", Origin = "THIS STUDY")
+BET_FL_RD_PARAMS = data.table(Ocean = c("Atlantic Ocean", "Indian Ocean"),
+                              SpeciesCode = "BET",
+                              SpeciesName = "Bigeye tuna",
+                              SpeciesScientific = c("Thunnus obesus"),
+                              Sex = "Mixed",
+                              Source = "LF",
+                              Target = "RD",
+                              SampleSize = c(BET_SAMPLES_FL_RD[ocean_code == "AO", .N], BET_SAMPLES_FL_RD[ocean_code == "IO", .N]),
+                              ForkLengthRange = c(BET_SAMPLES_FL_RD[ocean_code == "AO", paste(sprintf("%.1f", range(fork_length)), collapse = "-")], BET_SAMPLES_FL_RD[ocean_code == "IO", paste(sprintf("%.1f", range(fork_length)), collapse = "-")]),
+                              RoundWeightRange = c(BET_SAMPLES_FL_RD[ocean_code == "AO", paste(sprintf("%.1f", range(whole_weight_kg)), collapse = "-")], BET_SAMPLES_FL_RD[ocean_code == "IO", paste(sprintf("%.1f", range(whole_weight_kg)), collapse = "-")]),
+                              a = c(a_BET_FL_RD_AO, a_BET_FL_RD_IO),
+                              b = c(b_BET_FL_RD_AO, b_BET_FL_RD_IO),
+                              Reference = "IOTC",
+                              Origin = "THIS STUDY")
 
 ## SKIPJACK TUNA ####
 
 # Geo-referenced data set
-SKJ_SAMPLES = TUNA_SAMPLES[species_code_fao == "SKJ" & ProvCode %in% c("MONS", "ETRA", "EAFR", "WTRA", "GUIN", "CNRY")]
+SKJ_SAMPLES_FL_RD_FULL = TUNA_SAMPLES[species_code_fao == "SKJ" & ProvCode %in% c("MONS", "ETRA", "EAFR", "WTRA", "GUIN", "CNRY") & sex %in% c("M", "F") & SchoolType %in% c("DFAD", "FSC") & !is.na(fork_length) & !is.na(whole_weight_kg)]
 
 # Full model with covariates
-SKJ_FL_RD_LM_FULL = lm(log10RW ~ log10FL + Province + Quarter + SchoolType + Sex, data = SKJ_SAMPLES[sex %in% c("M", "F") & aggregation %in% c("DFAD", "FSC")])
+SKJ_FL_RD_LM_FULL = lm(log10RW ~ log10FL + Province + Quarter + SchoolType + Sex, data = SKJ_SAMPLES_FL_RD_FULL)
 
 #stepAIC(SKJ_FL_RD_LM_FULL)
-# all covariates kept in the model
+# sex removed from in the model
 
 # Final model
-SKJ_FL_RD_LM_WITH_COV_FINAL = SKJ_FL_RD_LM_FULL
+SKJ_SAMPLES_FL_RD_COVARIATES = TUNA_SAMPLES[species_code_fao == "SKJ" & ProvCode %in% c("MONS", "ETRA", "EAFR", "WTRA", "GUIN", "CNRY") & SchoolType %in% c("DFAD", "FSC") & !is.na(fork_length) & !is.na(whole_weight_kg)]
+
+SKJ_FL_RD_LM_WITH_COV_FINAL = lm(log10RW ~ log10FL + Province + Quarter + SchoolType + Sex, data = SKJ_SAMPLES_FL_RD_COVARIATES)
 
 SKJ_FL_RD_LM_WITH_COV_FINAL_ANOVA = anova_table("Skipjack tuna", SKJ_FL_RD_LM_WITH_COV_FINAL)
 SKJ_FL_RD_LM_WITH_COV_FINAL_R2    = (summary(SKJ_FL_RD_LM_WITH_COV_FINAL))$r.squared
 
 # Model without covariate
-SKJ_FL_RD_LM_AO_FINAL = lm(log10RW ~ log10FL, data = TUNA_SAMPLES[species_code_fao == "SKJ" & ocean_code == "AO"])
-SKJ_FL_RD_LM_IO_FINAL = lm(log10RW ~ log10FL, data = TUNA_SAMPLES[species_code_fao == "SKJ" & ocean_code == "IO"])
 
-ANOVA_SKJ_FL_RD_AO = anova_table("Skipjack tuna", SKJ_FL_RD_LM_AO_FINAL)
+SKJ_SAMPLES_FL_RD = TUNA_SAMPLES[species_code_fao == "SKJ" & !is.na(fork_length) & !is.na(whole_weight_kg)]
+
+SKJ_FL_RD_LM_AO_FINAL = lm(log10RW ~ log10FL, data = SKJ_SAMPLES_FL_RD[ocean_code == "AO"])
+SKJ_FL_RD_LM_IO_FINAL = lm(log10RW ~ log10FL, data = SKJ_SAMPLES_FL_RD[ocean_code == "IO"])
+
+ANOVA_SKJ_FL_RD_AO = anova_table("Skipjack tuna", SKJ_FL_RD_LM_AO_FINAL, 1)
 R2_SKJ_FL_RD_AO    = (summary(SKJ_FL_RD_LM_AO_FINAL))$r.squared
 a_SKJ_FL_RD_AO     = 10^coef(SKJ_FL_RD_LM_AO_FINAL)[1]*exp(var(residuals(SKJ_FL_RD_LM_AO_FINAL))*2.651)
 b_SKJ_FL_RD_AO     = coef(SKJ_FL_RD_LM_AO_FINAL)[2]
 
-ANOVA_SKJ_FL_RD_IO = anova_table("Skipjack tuna", SKJ_FL_RD_LM_IO_FINAL)
+ANOVA_SKJ_FL_RD_IO = anova_table("Skipjack tuna", SKJ_FL_RD_LM_IO_FINAL, 1)
 R2_SKJ_FL_RD_IO    = (summary(SKJ_FL_RD_LM_IO_FINAL))$r.squared
 a_SKJ_FL_RD_IO     = 10^coef(SKJ_FL_RD_LM_IO_FINAL)[1]*exp(var(residuals(SKJ_FL_RD_LM_IO_FINAL))*2.651)
 b_SKJ_FL_RD_IO     = coef(SKJ_FL_RD_LM_IO_FINAL)[2]
 
-SKJ_FL_RD_PARAMS = data.table(Ocean = c("Atlantic Ocean", "Indian Ocean"), SpeciesCode = "SKJ", SpeciesName = "Skipjack tuna", SpeciesScientific = c("Katsuwonus pelamis"), Sex = "Mixed", Source = "LF", Target = "RD", SampleSize = c(TUNA_SAMPLES[species_code_fao == "SKJ" & ocean_code == "AO", .N], TUNA_SAMPLES[species_code_fao == "SKJ" & ocean_code == "IO", .N]), ForkLengthMin = c(TUNA_SAMPLES[species_code_fao == "SKJ" & ocean_code == "IO", min(fork_length, na.rm = TRUE)], TUNA_SAMPLES[species_code_fao == "SKJ" & ocean_code == "IO", min(fork_length, na.rm = TRUE)]), ForkLengthMax = c(TUNA_SAMPLES[species_code_fao == "SKJ" & ocean_code == "AO", max(fork_length, na.rm = TRUE)], TUNA_SAMPLES[species_code_fao == "SKJ" & ocean_code == "IO", max(fork_length, na.rm = TRUE)]), a = c(a_SKJ_FL_RD_AO, a_SKJ_FL_RD_IO), b = c(b_SKJ_FL_RD_AO, b_SKJ_FL_RD_IO), Reference = "IOTC", Origin = "THIS STUDY")
+SKJ_FL_RD_PARAMS = data.table(Ocean = c("Atlantic Ocean", "Indian Ocean"),
+                              SpeciesCode = "SKJ",
+                              SpeciesName = "Skipjack tuna",
+                              SpeciesScientific = c("Katsuwonus pelamis"),
+                              Sex = "Mixed",
+                              Source = "LF",
+                              Target = "RD",
+                              SampleSize = c(SKJ_SAMPLES_FL_RD[ocean_code == "AO", .N], SKJ_SAMPLES_FL_RD[ocean_code == "IO", .N]),
+                              ForkLengthRange = c(SKJ_SAMPLES_FL_RD[ocean_code == "AO", paste(sprintf("%.1f", range(fork_length)), collapse = "-")], SKJ_SAMPLES_FL_RD[ocean_code == "IO", paste(sprintf("%.1f", range(fork_length)), collapse = "-")]),
+                              RoundWeightRange = c(SKJ_SAMPLES_FL_RD[ocean_code == "AO", paste(sprintf("%.1f", range(whole_weight_kg)), collapse = "-")], SKJ_SAMPLES_FL_RD[ocean_code == "IO", paste(sprintf("%.1f", range(whole_weight_kg)), collapse = "-")]),
+                              a = c(a_SKJ_FL_RD_AO, a_SKJ_FL_RD_IO),
+                              b = c(b_SKJ_FL_RD_AO, b_SKJ_FL_RD_IO),
+                              Reference = "IOTC",
+                              Origin = "THIS STUDY")
 
 # YELLOWFIN TUNA ####
 
