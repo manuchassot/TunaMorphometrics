@@ -119,8 +119,6 @@ TUNA_SAMPLES[organism_identifier == "AA1958", whole_weight_kg := NA]    # weight
 TUNA_SAMPLES[organism_identifier == "DCF-AO-1107", whole_weight_kg := NA]
 TUNA_SAMPLES[organism_identifier == "DCF-AO-1372", whole_weight_kg := NA]
 
-
-
 # Obvious errors in IO YFT weights
 TUNA_SAMPLES[organism_identifier %in% c("DCF6878", "IOT24", "OT11610", "A260", "YFT-09.M2.L5.4","IOT_2016_0305", "YFT-09.M2.L4.12", "DCF0031", "DCF18985", "DCF_18985"), whole_weight_kg := NA]
 
